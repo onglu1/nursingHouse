@@ -71,7 +71,7 @@ public class AddPatientInterfaceController implements Initializable{
     	int maxlength = 339;
 //    	System.out.println("qwq");
     	String name = null;
-    	int age = 0;
+    	long age = 0;
     	boolean sex = false;
     	String emergencyContact = null;
     	String emergencyPhoneNumber = null;
@@ -131,7 +131,7 @@ public class AddPatientInterfaceController implements Initializable{
     	}
     	confirmButton.getScene().getWindow().setWidth(maxlength);
     	if(isStorable) {
-    		Database.getInstance().getPatients().add(new Patient(name, age, sex, phoneNumber, emergencyContact, emergencyPhoneNumber));
+    		Database.getInstance().getPatients().add(new Patient(name, (int)age, sex, phoneNumber, emergencyContact, emergencyPhoneNumber));
         	confirmButton.getScene().getWindow().hide();
     	}
     }
@@ -160,13 +160,13 @@ public class AddPatientInterfaceController implements Initializable{
     	confirmButton.getScene().getWindow().setWidth(339);
     	
     }
-    void setTextListener(TextField text) {
+    void setLengthListener(TextField text, int length) {
     	text.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				if(newValue.length() >= 15) {
+				if(newValue.length() > length) {
 					text.setText(oldValue);
 				}
 			}
@@ -194,11 +194,11 @@ public class AddPatientInterfaceController implements Initializable{
 		sexChoiceGroup.getToggles().add(femalButton);
 		sexChoiceGroup.getToggles().add(maleButton);
 		//限制长度
-		setTextListener(nameField);
-		setTextListener(ageField);
-		setTextListener(emergencyContactField);
-		setTextListener(emergencyPhoneNumberField);
-		setTextListener(phoneNumberField);
+		setLengthListener(nameField, 15);
+		setLengthListener(ageField, 3);
+		setLengthListener(emergencyContactField, 15);
+		setLengthListener(emergencyPhoneNumberField, 15);
+		setLengthListener(phoneNumberField, 15);
 		//仅允许数字
 		setNumberOnlyListener(phoneNumberField);
 		setNumberOnlyListener(emergencyPhoneNumberField);

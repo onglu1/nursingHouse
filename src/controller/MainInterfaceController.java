@@ -136,8 +136,6 @@ public class MainInterfaceController implements Initializable{
     //新增病人
     @FXML
     void addPatient() throws Exception {
-//    	System.out.println("qwq");
-//    	Database.getInstance().getPatients().add(new Patient("李四", 18, true, "123456789", "李四的娘", "123456"));
     	AddPatient addPatient = new AddPatient();
     	Stage stage1 = new Stage();
     	addPatient.start(stage1);

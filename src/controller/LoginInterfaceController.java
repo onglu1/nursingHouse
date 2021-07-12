@@ -154,7 +154,7 @@ public class LoginInterfaceController implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
-				if(newValue.length() >= 15) {
+				if(newValue.length() > 15) {
 					text.setText(oldValue);
 				}
 			}
