@@ -31,19 +31,19 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ListView layoutX="14.0" layoutY="103.0" prefHeight="508.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="103.0" />
                                           <HBox layoutX="6.0" layoutY="71.0" prefHeight="33.0" prefWidth="894.0" AnchorPane.bottomAnchor="507.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
                                              <children>
-                                                <Button mnemonicParsing="false" text="新增" />
+                                                <Button mnemonicParsing="false" onAction="#addPatient" text="新增" />
                                                 <Button mnemonicParsing="false" text="修改" />
                                                 <Button mnemonicParsing="false" text="查询" />
-                                                <TextField prefHeight="30.0" prefWidth="611.0" promptText="键入你要查询的内容...">
+                                                <TextField prefHeight="30.0" prefWidth="640.0" promptText="键入你要查询的内容...">
                                                    <HBox.margin>
                                                       <Insets left="100.0" />
                                                    </HBox.margin>
                                                 </TextField>
                                              </children>
                                           </HBox>
+                                          <TableView fx:id="patientTableView" layoutX="6.0" layoutY="104.0" prefHeight="507.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="104.0" />
                                        </children>
                                     </AnchorPane>
                               </content>

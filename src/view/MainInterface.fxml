@@ -33,7 +33,7 @@
                                        <children>
                                           <HBox layoutX="6.0" layoutY="71.0" prefHeight="33.0" prefWidth="894.0" AnchorPane.bottomAnchor="507.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
                                              <children>
-                                                <Button mnemonicParsing="false" text="新增" />
+                                                <Button mnemonicParsing="false" onAction="#addPatient" text="新增" />
                                                 <Button mnemonicParsing="false" text="修改" />
                                                 <Button mnemonicParsing="false" text="查询" />
                                                 <TextField prefHeight="30.0" prefWidth="640.0" promptText="键入你要查询的内容...">
@@ -43,16 +43,7 @@
                                                 </TextField>
                                              </children>
                                           </HBox>
-                                          <TableView layoutX="6.0" layoutY="104.0" prefHeight="507.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="104.0">
-                                            <columns>
-                                              <TableColumn prefWidth="97.0" text="姓名" />
-                                              <TableColumn prefWidth="163.0" text="年龄" />
-                                                <TableColumn prefWidth="93.0" text="性别" />
-                                                <TableColumn prefWidth="163.0" text="联系电话" />
-                                                <TableColumn prefWidth="169.0" text="紧急联系人" />
-                                                <TableColumn prefWidth="214.0" text="紧急联系电话" />
-                                            </columns>
-                                          </TableView>
+                                          <TableView fx:id="patientTableView" layoutX="6.0" layoutY="104.0" prefHeight="507.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="104.0" />
                                        </children>
                                     </AnchorPane>
                               </content>
