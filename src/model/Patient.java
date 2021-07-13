@@ -82,5 +82,10 @@ public class Patient {
 		else if(s.equals("紧急联系电话")) return this.emergencyPhoneNumber;
 		return "";
 	}
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 
 }

@@ -183,7 +183,27 @@
                                     <HBox alignment="CENTER" prefHeight="45.0" prefWidth="215.0">
                                        <children>
                                           <Button mnemonicParsing="false" onAction="#addRoom" text="新增" />
-                                          <Button mnemonicParsing="false" text="删除">
+                                          <Button mnemonicParsing="false" onAction="#removeRoom" text="删除">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="bedModifier" alignment="TOP_CENTER" layoutX="10.0" layoutY="136.0" prefHeight="85.0" prefWidth="215.0" visible="false">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="215.0">
+                                       <children>
+                                          <Label text="床号：" />
+                                          <TextField fx:id="bedField" prefHeight="30.0" prefWidth="153.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="215.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#addBed" text="新增" />
+                                          <Button mnemonicParsing="false" onAction="#removeBed" text="删除">
                                              <HBox.margin>
                                                 <Insets left="10.0" />
                                              </HBox.margin>

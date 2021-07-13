@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Room {
 	public final static int GYM = "gym".hashCode();
-	public final static int BATHROOM = "gym".hashCode();
+	public final static int BATHROOM = "bathroom".hashCode();
 	private String name;
 	private boolean isRareRoom;
 	private int RareType;
@@ -66,5 +66,10 @@ public class Room {
 		if(s.equals("淋浴室")) return Room.BATHROOM;
 		if(s.equals("健身房")) return Room.GYM;
 		return -1;
+	}
+	public static String getType(int hashNum) {
+		if(hashNum == Room.GYM) return "健身房";
+		if(hashNum == Room.BATHROOM) return "淋浴室";
+		return "无";
 	}
 }

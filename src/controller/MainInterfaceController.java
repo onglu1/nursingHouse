@@ -348,11 +348,21 @@ public class MainInterfaceController implements Initializable{
     private Label roomInfo1;
     @FXML
     private Label roomInfo2;
+    
+    @FXML
+    private VBox bedModifier;
+    @FXML
+    private TextField bedField;
+    
     //[end]
     
     //返回上级菜单
     @FXML
     private void preMenu() {
+		buildingModifier.setVisible(false);
+		levelModifier.setVisible(false);
+		roomModifier.setVisible(false);
+		bedModifier.setVisible(false);
     	if(!bedList.getItems().isEmpty()) {
     		bedList.getItems().clear();
     		roomList.getSelectionModel().clearSelection();
@@ -388,9 +398,9 @@ public class MainInterfaceController implements Initializable{
     	    		return ;
     			}
     		}
-    		buildingField.setText("");
     		Database.getInstance().getBuildings().add(new Building(name));
     		buildingList.getItems().setAll(Database.getInstance().getBuildings());
+    		buildingField.setText("");
     	}
     }
     
@@ -409,6 +419,9 @@ public class MainInterfaceController implements Initializable{
     		if(result.get() == ButtonType.OK) {
     			Database.getInstance().getBuildings().remove(buildingList.getSelectionModel().getSelectedItem());
         		buildingList.getItems().setAll(Database.getInstance().getBuildings());
+            	levelList.getItems().clear();
+        		roomList.getItems().clear();
+        		bedList.getItems().clear();
     		}
     	}
     }
@@ -429,9 +442,9 @@ public class MainInterfaceController implements Initializable{
     	    		return ;
     			}
     		}
-    		levelField.setText("");
-    		father.getLevels().add(new Level(levelField.getText()));
+    		father.getLevels().add(new Level(name));
     		levelList.getItems().setAll(father.getLevels());
+    		levelField.setText("");
     		
     	}
     }
@@ -452,6 +465,8 @@ public class MainInterfaceController implements Initializable{
     		if(result.get() == ButtonType.OK) {
     			father.getLevels().remove(levelList.getSelectionModel().getSelectedItem());
         		levelList.getItems().setAll(father.getLevels());
+        		roomList.getItems().clear();
+        		bedList.getItems().clear();
     		}
     	}
     }
@@ -478,7 +493,7 @@ public class MainInterfaceController implements Initializable{
     	    		return ;
     			}
     		}
-    		System.out.println(father);
+//    		System.out.println(father);
     		if(isRareChoice.getSelectionModel().getSelectedItem().equals("是")) {
     			father.getRooms().add(new Room(roomField.getText(), true, Room.getTypeByChinese(rareTypeChoice.getSelectionModel().getSelectedItem())));
     		} else {
@@ -492,10 +507,75 @@ public class MainInterfaceController implements Initializable{
     	}
     	
     }
+
+    //删除房间
+    @FXML
+    private void removeRoom() {
+    	Level father = levelList.getSelectionModel().getSelectedItem();
+    	if(levelList.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "尚未选择楼层");
+    		alert.show();
+    	} else {
+    		Alert alert = new Alert(AlertType.WARNING);
+    		alert.setTitle("警告");
+    		alert.getButtonTypes().add(ButtonType.CANCEL);
+    		alert.setContentText("该操作不可逆，请确认是否删除。");
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if(result.get() == ButtonType.OK) {
+    			father.getRooms().remove(roomList.getSelectionModel().getSelectedItem());
+        		roomList.getItems().setAll(father.getRooms());
+        		bedList.getItems().clear();
+    		}
+    	}
+    }
+    //添加床
+    @FXML
+    private void addBed() {
+    	Room father = roomList.getSelectionModel().getSelectedItem();
+    	if(Pattern.matches(" *", bedField.getText())) {
+    		Alert alert = new Alert(AlertType.ERROR, "请输入床号");
+    		alert.show();
+    	} else {
+    		String name = bedField.getText();
+    		for(Bed bed : father.getBeds()) {
+    			if(bed.getName().equals(name)) {
+    				Alert alert = new Alert(AlertType.ERROR, "已存在同名床位 ");
+    	    		alert.show();
+    	    		return ;
+    			}
+    		}
+    		father.getBeds().add(new Bed(name));
+    		bedList.getItems().setAll(father.getBeds());
+    		bedField.setText("");
+    		
+    	}
+    }
+    //删除床位
+    @FXML
+    private void removeBed() {
+    	Room father = roomList.getSelectionModel().getSelectedItem();
+    	if(bedList.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "尚未选择床位");
+    		alert.show();
+    	} else {
+    		Alert alert = new Alert(AlertType.WARNING);
+    		alert.setTitle("警告");
+    		alert.getButtonTypes().add(ButtonType.CANCEL);
+    		alert.setContentText("该操作不可逆，请确认是否删除。");
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if(result.get() == ButtonType.OK) {
+    			father.getBeds().remove(bedList.getSelectionModel().getSelectedItem());
+        		bedList.getItems().setAll(father.getBeds());
+    		}
+    	}
+    	
+    }
     //楼宇管理初始化
     void buildingmanagementInit() {
-//    	buildingModifier.setVisible(true);
-//    	levelModifier.setVisible(false);
+    	buildingModifier.setVisible(false);
+    	levelModifier.setVisible(false);
+    	roomModifier.setVisible(false);
+    	bedModifier.setVisible(false);
     	//设置房间信息展示栏
     	roomInfo1.setText("");
     	roomInfo2.setText("");
@@ -530,7 +610,32 @@ public class MainInterfaceController implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends Room> observable, Room oldValue, Room newValue) {
 				// TODO Auto-generated method stub
-				if(newValue != null) bedList.getItems().setAll(newValue.getBeds());
+				if(newValue != null) {
+					roomInfo1.setText("是否为稀有房间：" + (newValue.isRareRoom() ? "是" :"否"));
+					if(newValue.isRareRoom())
+						roomInfo2.setText("房间种类：" + Room.getType(newValue.getRareType()));
+					bedList.getItems().setAll(newValue.getBeds());
+				} else {
+					roomInfo1.setText("");
+					roomInfo2.setText("");
+				}
+				
+			}
+		});
+    	bedList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Bed>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Bed> observable, Bed oldValue, Bed newValue) {
+				// TODO Auto-generated method stub
+				if(newValue != null) {
+					if(newValue.getOwner() != null)
+						roomInfo1.setText(newValue.getName() + "，占有者：" + newValue.getOwner().toString());
+					else roomInfo1.setText(newValue.getName() + "：当前空闲");
+					roomInfo2.setText("");
+				} else {
+					roomInfo1.setText("");
+					roomInfo2.setText("");
+				}
 				
 			}
 		});
@@ -539,15 +644,95 @@ public class MainInterfaceController implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub
+				if(newValue == null) return ;
 				if(newValue.equals("否")) {
-					rareTypeChoice.getSelectionModel().clearSelection();
+					if(rareTypeChoice.getSelectionModel() != null)
+						rareTypeChoice.getSelectionModel().clearSelection();
 					rareTypeChoice.setDisable(true);
-				} else {
+				} else if(newValue.equals("是")){
 					rareTypeChoice.setDisable(false);
 				}
 			}
 		
     	});
+    	buildingList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == true) {
+					buildingModifier.setVisible(true);
+					levelModifier.setVisible(false);
+					roomModifier.setVisible(false);
+					bedModifier.setVisible(false);
+				}
+				if(newValue == false) {
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+						buildingModifier.setVisible(false); 
+				}
+				
+			}
+		});
+    	levelList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == true) {
+					if(buildingList.getSelectionModel().getSelectedItem() != null){
+						buildingModifier.setVisible(false);
+						levelModifier.setVisible(true);
+						roomModifier.setVisible(false);
+						bedModifier.setVisible(false);
+					}
+				}
+				if(newValue == false) {
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+						levelModifier.setVisible(false); 
+				}
+				
+			}
+		});
+    	roomList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == true) {
+					if(levelList.getSelectionModel().getSelectedItem() != null) {
+						buildingModifier.setVisible(false);
+						levelModifier.setVisible(false);
+						roomModifier.setVisible(true);
+						bedModifier.setVisible(false);
+					}
+				}
+				if(newValue == false) {
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+						roomModifier.setVisible(false); 
+				}
+				
+			}
+		});
+    	bedList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == true) {
+					if(roomList.getSelectionModel().getSelectedItem() != null){
+						buildingModifier.setVisible(false);
+						levelModifier.setVisible(false);
+						roomModifier.setVisible(false);
+						bedModifier.setVisible(true);
+					}
+				}
+				if(newValue == false) {
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+						bedModifier.setVisible(false); 
+				}
+				
+			}
+		});
     }
     
 //[end]
