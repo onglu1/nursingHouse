@@ -31,19 +31,32 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <HBox layoutX="6.0" layoutY="71.0" prefHeight="33.0" prefWidth="894.0" AnchorPane.bottomAnchor="507.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
+                                          <VBox layoutX="205.0" layoutY="99.0" prefHeight="532.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#addPatient" text="新增" />
-                                                <Button mnemonicParsing="false" text="修改" />
-                                                <Button mnemonicParsing="false" text="查询" />
-                                                <TextField prefHeight="30.0" prefWidth="640.0" promptText="键入你要查询的内容...">
-                                                   <HBox.margin>
-                                                      <Insets left="100.0" />
-                                                   </HBox.margin>
-                                                </TextField>
+                                                <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" onAction="#addPatient" text="新增" />
+                                                      <Button mnemonicParsing="false" onAction="#modify" text="修改" />
+                                                      <Button mnemonicParsing="false" onAction="#query" text="查询">
+                                                         <HBox.margin>
+                                                            <Insets left="80.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <ChoiceBox fx:id="searchChoice" prefHeight="23.0" prefWidth="131.0">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </ChoiceBox>
+                                                      <TextField fx:id="searchField" onKeyPressed="#enterPressed" prefHeight="23.0" prefWidth="536.0" promptText="键入你要查询的内容...">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                </HBox>
+                                                <TableView fx:id="patientTableView" prefHeight="560.0" prefWidth="900.0" />
                                              </children>
-                                          </HBox>
-                                          <TableView fx:id="patientTableView" layoutX="6.0" layoutY="104.0" prefHeight="507.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="104.0" />
+                                          </VBox>
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -70,7 +83,26 @@
           </Tab>
             <Tab fx:id="buildingTab" text="楼宇管理">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutY="99.0" prefHeight="532.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
+                           <children>
+                              <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="新增" />
+                                    <Button mnemonicParsing="false" text="修改" />
+                                 </children>
+                              </HBox>
+                              <TreeTableView prefHeight="507.0" prefWidth="900.0">
+                                <columns>
+                                  <TreeTableColumn prefWidth="213.0" text="C1" />
+                                  <TreeTableColumn minWidth="0.0" prefWidth="285.0" text="C2" />
+                                </columns>
+                              </TreeTableView>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
                </content>
             </Tab>
         </tabs>

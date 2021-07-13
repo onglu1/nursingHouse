@@ -1,12 +1,23 @@
 package model;
 
+import java.lang.reflect.Method;
+import java.util.regex.Pattern;
+
 public class Patient {
 	private String name;
 	private int age;
+	private String id;
 	private boolean sex;
 	private String phoneNumber;
 	private String emergencyContact;
 	private String emergencyPhoneNumber;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -43,21 +54,33 @@ public class Patient {
 	public void setEmergencyPhoneNumber(String emergencyPhoneNumber) {
 		this.emergencyPhoneNumber = emergencyPhoneNumber;
 	}
-	public Patient(String name, int age, boolean sex, String phoneNumber, String emergencyContact,
+
+	public Patient(String name, int age, String id, boolean sex, String emergencyContact, String emergencyPhoneNumber) {
+		this.name = name;
+		this.age = age;
+		this.id = id;
+		this.phoneNumber = "";
+		this.sex = sex;
+		this.emergencyContact = emergencyContact;
+		this.emergencyPhoneNumber = emergencyPhoneNumber;
+	}
+	public Patient(String name, int age, String id, boolean sex, String phoneNumber, String emergencyContact,
 			String emergencyPhoneNumber) {
 		this.name = name;
 		this.age = age;
+		this.id = id;
 		this.sex = sex;
 		this.phoneNumber = phoneNumber;
 		this.emergencyContact = emergencyContact;
 		this.emergencyPhoneNumber = emergencyPhoneNumber;
 	}
-	public Patient(String name, int age, boolean sex, String emergencyContact, String emergencyPhoneNumber) {
-		this.name = name;
-		this.age = age;
-		this.sex = sex;
-		this.emergencyContact = emergencyContact;
-		this.emergencyPhoneNumber = emergencyPhoneNumber;
+	public String getByName(String s) {
+		if(s.equals("姓名")) return this.name;
+		else if(s.equals("联系电话")) return this.phoneNumber;
+		else if(s.equals("身份证号码")) return this.id; 
+		else if(s.equals("紧急联系人")) return this.emergencyContact;
+		else if(s.equals("紧急联系电话")) return this.emergencyPhoneNumber;
+		return "";
 	}
-	
+
 }

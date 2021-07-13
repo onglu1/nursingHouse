@@ -7,17 +7,18 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPatientInterfaceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#enterPressed" prefHeight="283.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPatientInterfaceController">
    <children>
       <GridPane layoutX="14.0" layoutY="14.0" prefHeight="214.0" prefWidth="639.0">
         <columnConstraints>
           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="115.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="314.0" minWidth="10.0" prefWidth="165.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="359.0" minWidth="10.0" prefWidth="359.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="314.0" minWidth="10.0" prefWidth="202.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="359.0" minWidth="10.0" prefWidth="322.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -26,16 +27,14 @@
          <children>
             <Label text="*姓名：" />
             <Label text="*年龄：" GridPane.rowIndex="1" />
-            <Label text="*性别：" GridPane.rowIndex="2" />
-            <Label text="联系电话：" GridPane.rowIndex="3" />
-            <Label text="*紧急联系人：" GridPane.rowIndex="4" />
-            <Label text="*紧急联系电话：" GridPane.rowIndex="5" />
+            <Label text="*性别：" GridPane.rowIndex="3" />
+            <Label text="联系电话：" GridPane.rowIndex="4" />
+            <Label text="*紧急联系人：" GridPane.rowIndex="5" />
+            <Label text="*紧急联系电话：" GridPane.rowIndex="6" />
             <TextField fx:id="nameField" GridPane.columnIndex="1" />
             <TextField fx:id="ageField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="phoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="emergencyContactField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="emergencyPhoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <HBox alignment="CENTER_LEFT" prefHeight="19.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <RadioButton fx:id="maleButton" mnemonicParsing="false" text="男" />
                   <RadioButton fx:id="femalButton" mnemonicParsing="false" text="女">
@@ -45,12 +44,17 @@
                   </RadioButton>
                </children>
             </HBox>
+            <TextField fx:id="phoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="emergencyContactField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="emergencyPhoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label fx:id="nameAlert" textFill="RED" GridPane.columnIndex="2" />
             <Label fx:id="ageAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label fx:id="sexAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="phoneNumberAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="emergencyContactAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label fx:id="emergencyPhoneNumberAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label fx:id="sexAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="phoneNumberAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label fx:id="emergencyContactAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label fx:id="emergencyPhoneNumberAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Label text="*身份证号码：" GridPane.rowIndex="2" />
+            <Label fx:id="idAlert" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <HBox layoutX="108.0" layoutY="239.0" prefHeight="30.0" prefWidth="153.0">
