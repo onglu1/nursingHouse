@@ -54,7 +54,7 @@
                                                       </TextField>
                                                    </children>
                                                 </HBox>
-                                                <TableView fx:id="patientTableView" prefHeight="560.0" prefWidth="900.0" />
+                                                <TableView fx:id="patientTableView" prefHeight="560.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -85,22 +85,118 @@
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <VBox layoutY="99.0" prefHeight="532.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
+                        <HBox layoutX="52.0" layoutY="96.0" prefHeight="493.0" prefWidth="589.0">
                            <children>
-                              <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" text="新增" />
-                                    <Button mnemonicParsing="false" text="修改" />
-                                 </children>
-                              </HBox>
-                              <TreeTableView prefHeight="507.0" prefWidth="900.0">
-                                <columns>
-                                  <TreeTableColumn prefWidth="213.0" text="C1" />
-                                  <TreeTableColumn minWidth="0.0" prefWidth="285.0" text="C2" />
-                                </columns>
-                              </TreeTableView>
+                              <ListView fx:id="buildingList" prefHeight="310.0" prefWidth="132.0" />
+                              <ListView fx:id="levelList" prefHeight="310.0" prefWidth="132.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </ListView>
+                              <ListView fx:id="roomList" prefHeight="310.0" prefWidth="132.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </ListView>
+                              <ListView fx:id="bedList" prefHeight="310.0" prefWidth="132.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </ListView>
                            </children>
-                        </VBox>
+                        </HBox>
+                        <AnchorPane layoutX="663.0" layoutY="174.0" prefHeight="337.0" prefWidth="215.0">
+                           <children>
+                              <VBox fx:id="buildingModifier" alignment="TOP_CENTER" layoutY="126.0" prefHeight="85.0" prefWidth="215.0" visible="false" AnchorPane.bottomAnchor="126.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="126.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="215.0">
+                                       <children>
+                                          <Label text="楼名：" />
+                                          <TextField fx:id="buildingField" prefHeight="30.0" prefWidth="153.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="215.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#addBuilding" text="新增" />
+                                          <Button mnemonicParsing="false" onAction="#removeBuilding" text="删除">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="levelModifier" alignment="TOP_CENTER" layoutY="126.0" prefHeight="85.0" prefWidth="215.0" visible="false">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="215.0">
+                                       <children>
+                                          <Label text="楼层名" />
+                                          <TextField fx:id="levelField" prefHeight="30.0" prefWidth="153.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="215.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#addLevel" text="新增" />
+                                          <Button mnemonicParsing="false" onAction="#removeLevel" text="删除">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="roomModifier" alignment="TOP_CENTER" layoutY="71.0" prefHeight="180.0" prefWidth="215.0">
+                                 <children>
+                                    <GridPane prefHeight="140.0" prefWidth="215.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="89.0" minWidth="10.0" prefWidth="83.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="132.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="房间名：">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="稀有房间：" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="房间种类：" GridPane.rowIndex="2">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="roomField" GridPane.columnIndex="1" />
+                                          <ChoiceBox fx:id="isRareChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <ChoiceBox fx:id="rareTypeChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       </children>
+                                    </GridPane>
+                                    <HBox alignment="CENTER" prefHeight="45.0" prefWidth="215.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#addRoom" text="新增" />
+                                          <Button mnemonicParsing="false" text="删除">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <Button layoutX="746.0" layoutY="511.0" mnemonicParsing="false" onAction="#preMenu" text="返回" />
+                        <Label fx:id="roomInfo1" layoutX="685.0" layoutY="41.0" prefHeight="20.0" prefWidth="163.0" text="Label" />
+                        <Label fx:id="roomInfo2" layoutX="685.0" layoutY="61.0" prefHeight="20.0" prefWidth="163.0" text="Label" />
                      </children>
                   </AnchorPane>
                </content>
@@ -155,10 +251,10 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Rectangle fx:id="userRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="40.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="userRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
                </children>
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets />
                </VBox.margin>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -173,7 +269,7 @@
                      <children>
                         <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icon/sub_account.png" />
+                              <Image url="@../icon/evaluate.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="15.0" />
@@ -192,7 +288,7 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Rectangle fx:id="evaluateRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="40.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="evaluateRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
                </children>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -201,7 +297,7 @@
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets top="15.0" />
+                  <Insets />
                </VBox.margin>
             </AnchorPane>
             <AnchorPane layoutX="10.0" layoutY="30.0" prefHeight="41.0" prefWidth="200.0">
@@ -210,7 +306,7 @@
                      <children>
                         <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icon/sub_account.png" />
+                              <Image url="@../icon/building.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="15.0" />
@@ -229,7 +325,7 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Rectangle fx:id="buildingRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="40.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="buildingRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
                </children>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -238,7 +334,7 @@
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets top="15.0" />
+                  <Insets />
                </VBox.margin>
             </AnchorPane>
          </children>

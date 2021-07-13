@@ -1,11 +1,18 @@
 package controller;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
+import building.Bed;
+import building.Building;
+import building.Level;
+import building.Room;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,16 +20,19 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -41,6 +51,9 @@ import model.Database;
 import model.Patient;
 
 public class MainInterfaceController implements Initializable{
+//------------------------------------------------------病患管理--------------------------------------------------------------------
+//[start]
+	//[start]
 	private ObservableList<Patient> patientList = FXCollections.observableArrayList();
     private Rectangle choiceRec;
     @FXML
@@ -85,6 +98,7 @@ public class MainInterfaceController implements Initializable{
     
     @FXML
     private TextField searchField;
+    //[end]
     
     //显示菜单
     @FXML
@@ -239,10 +253,9 @@ public class MainInterfaceController implements Initializable{
     	}
     }
 	
-    @Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		patientList.setAll(Database.getInstance().getPatients());
+    //初始化病患管理界面
+    void patientManagementInit() {
+    	patientList.setAll(Database.getInstance().getPatients());
 		patientTableView.setItems(patientList);
 		TableColumn<Patient, String> nameColumn = new TableColumn<Patient, String>("姓名");
 		TableColumn<Patient, Integer> ageColumn = new TableColumn<Patient, Integer>("年龄");
@@ -266,7 +279,7 @@ public class MainInterfaceController implements Initializable{
 		phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("phoneNumber"));
 		emergencyContactColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("emergencyContact"));
 		emergencyPhoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("emergencyPhoneNumber"));
-		nameColumn.setPrefWidth(150.0);
+		nameColumn.setPrefWidth(100.0);
 		nameColumn.setResizable(false);
 		idColumn.setPrefWidth(198.0);
 		idColumn.setResizable(false);
@@ -274,11 +287,11 @@ public class MainInterfaceController implements Initializable{
 		ageColumn.setResizable(false);
 		sexColumn.setPrefWidth(50);
 		sexColumn.setResizable(false);
-		phoneNumberColumn.setPrefWidth(150);
+		phoneNumberColumn.setPrefWidth(200);
 		phoneNumberColumn.setResizable(false);
-		emergencyContactColumn.setPrefWidth(150);
+		emergencyContactColumn.setPrefWidth(100);
 		emergencyContactColumn.setResizable(false);
-		emergencyPhoneNumberColumn.setPrefWidth(150);
+		emergencyPhoneNumberColumn.setPrefWidth(200);
 		emergencyPhoneNumberColumn.setResizable(false);
 		
 		patientTableView.getColumns().add(nameColumn);
@@ -297,6 +310,254 @@ public class MainInterfaceController implements Initializable{
 		searchChoice.getItems().add("紧急联系人");
 		searchChoice.getItems().add("紧急联系电话");
 		searchChoice.getSelectionModel().select("姓名");
+    }
+    
+//[end]
+//------------------------------------------------------评估管理--------------------------------------------------------------------
+
+//------------------------------------------------------楼宇管理--------------------------------------------------------------------
+//[start]
+    //[start]
+
+    @FXML
+    private ListView<Building> buildingList;
+    @FXML
+    private ListView<Level> levelList;
+    @FXML
+    private ListView<Room> roomList;
+    @FXML
+    private ListView<Bed> bedList;
+    
+    @FXML
+    private VBox buildingModifier;
+    @FXML
+    private TextField buildingField;
+    @FXML
+    private VBox levelModifier;
+    @FXML
+    private TextField levelField;
+    @FXML
+    private VBox roomModifier;
+    @FXML
+    private TextField roomField;
+    @FXML
+    private ChoiceBox<String> isRareChoice;
+    @FXML
+    private ChoiceBox<String> rareTypeChoice;
+    @FXML
+    private Label roomInfo1;
+    @FXML
+    private Label roomInfo2;
+    //[end]
+    
+    //返回上级菜单
+    @FXML
+    private void preMenu() {
+    	if(!bedList.getItems().isEmpty()) {
+    		bedList.getItems().clear();
+    		roomList.getSelectionModel().clearSelection();
+    		return ;
+    	}
+    	if(!roomList.getItems().isEmpty()) {
+    		roomList.getItems().clear();
+    		levelList.getSelectionModel().clearSelection();
+    		return ;
+    	}
+    	if(!levelList.getItems().isEmpty()) {
+    		levelList.getItems().clear();
+    		buildingList.getSelectionModel().clearSelection();
+    		return ;
+    	}
+		buildingList.getSelectionModel().clearSelection();
+		return ;
+    	
+    }
+    
+    //增加大楼
+    @FXML
+    private void addBuilding() {
+    	if(Pattern.matches(" *", buildingField.getText())) {
+    		Alert alert = new Alert(AlertType.ERROR, "请输入大楼名称");
+    		alert.show();
+    	} else {
+    		String name = buildingField.getText();
+    		for(Building building : Database.getInstance().getBuildings()) {
+    			if(building.getName().equals(name)) {
+    				Alert alert = new Alert(AlertType.ERROR, "已存在同名大楼");
+    	    		alert.show();
+    	    		return ;
+    			}
+    		}
+    		buildingField.setText("");
+    		Database.getInstance().getBuildings().add(new Building(name));
+    		buildingList.getItems().setAll(Database.getInstance().getBuildings());
+    	}
+    }
+    
+    //删除大楼
+    @FXML
+    private void removeBuilding() {
+    	if(buildingList.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "尚未选择大楼");
+    		alert.show();
+    	} else {
+    		Alert alert = new Alert(AlertType.WARNING);
+    		alert.setTitle("警告");
+    		alert.getButtonTypes().add(ButtonType.CANCEL);
+    		alert.setContentText("该操作不可逆，请确认是否删除。");
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if(result.get() == ButtonType.OK) {
+    			Database.getInstance().getBuildings().remove(buildingList.getSelectionModel().getSelectedItem());
+        		buildingList.getItems().setAll(Database.getInstance().getBuildings());
+    		}
+    	}
+    }
+    
+    //新建楼层
+    @FXML
+    private void addLevel() {
+    	Building father = buildingList.getSelectionModel().getSelectedItem();
+    	if(Pattern.matches(" *", levelField.getText())) {
+    		Alert alert = new Alert(AlertType.ERROR, "请输入楼层名称");
+    		alert.show();
+    	} else {
+    		String name = levelField.getText();
+    		for(Level level : father.getLevels()) {
+    			if(level.getName().equals(name)) {
+    				Alert alert = new Alert(AlertType.ERROR, "已存在同名楼层");
+    	    		alert.show();
+    	    		return ;
+    			}
+    		}
+    		levelField.setText("");
+    		father.getLevels().add(new Level(levelField.getText()));
+    		levelList.getItems().setAll(father.getLevels());
+    		
+    	}
+    }
+    
+    //删除楼层
+    @FXML
+    private void removeLevel() {
+    	Building father = buildingList.getSelectionModel().getSelectedItem();
+    	if(levelList.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "尚未选择楼层");
+    		alert.show();
+    	} else {
+    		Alert alert = new Alert(AlertType.WARNING);
+    		alert.setTitle("警告");
+    		alert.getButtonTypes().add(ButtonType.CANCEL);
+    		alert.setContentText("该操作不可逆，请确认是否删除。");
+    		Optional<ButtonType> result = alert.showAndWait();
+    		if(result.get() == ButtonType.OK) {
+    			father.getLevels().remove(levelList.getSelectionModel().getSelectedItem());
+        		levelList.getItems().setAll(father.getLevels());
+    		}
+    	}
+    }
+    
+    //添加房间
+    @FXML
+    private void addRoom() {
+    	Level father = levelList.getSelectionModel().getSelectedItem();
+    	if(Pattern.matches(" *", roomField.getText())) {
+    		Alert alert = new Alert(AlertType.ERROR, "请输入房间名称");
+    		alert.show();
+    	} else if(isRareChoice.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请选择是否为稀有房间");
+    		alert.show();
+    	} else if(isRareChoice.getSelectionModel().getSelectedItem().equals("是") && rareTypeChoice.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请选择稀有房间类型");
+    		alert.show();
+    	} else {
+    		String name = roomField.getText();
+    		for(Room room : father.getRooms()) {
+    			if(room.getName().equals(name)) {
+    				Alert alert = new Alert(AlertType.ERROR, "已存在同名房间");
+    	    		alert.show();
+    	    		return ;
+    			}
+    		}
+    		System.out.println(father);
+    		if(isRareChoice.getSelectionModel().getSelectedItem().equals("是")) {
+    			father.getRooms().add(new Room(roomField.getText(), true, Room.getTypeByChinese(rareTypeChoice.getSelectionModel().getSelectedItem())));
+    		} else {
+    			System.out.println(father.getRooms() == null);
+    			father.getRooms().add(new Room(roomField.getText(), false));
+    		}
+    		roomList.getItems().setAll(father.getRooms());
+    		roomField.setText("");
+    		isRareChoice.getSelectionModel().clearSelection();
+    		rareTypeChoice.getSelectionModel().clearSelection();
+    	}
+    	
+    }
+    //楼宇管理初始化
+    void buildingmanagementInit() {
+//    	buildingModifier.setVisible(true);
+//    	levelModifier.setVisible(false);
+    	//设置房间信息展示栏
+    	roomInfo1.setText("");
+    	roomInfo2.setText("");
+    	//添加房间选项栏
+    	isRareChoice.getItems().addAll("是", "否");
+    	rareTypeChoice.getItems().addAll("健身房", "淋浴房");
+    	//添加切换窗口的监听器
+    	ObservableList<Building> obl = buildingList.getItems();
+    	obl.setAll(Database.getInstance().getBuildings());
+    	buildingList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Building>() {
+			@Override
+			public void changed(ObservableValue<? extends Building> observable, Building oldValue, Building newValue) {
+				// TODO Auto-generated method stub
+				roomList.getItems().clear();
+				bedList.getItems().clear();
+				if(newValue != null) levelList.getItems().setAll(newValue.getLevels());
+			}
+		});
+    	levelList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Level>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Level> observable, Level oldValue, Level newValue) {
+				// TODO Auto-generated method stub
+				
+				bedList.getItems().clear();
+				if(newValue != null) roomList.getItems().setAll(newValue.getRooms());
+				
+			}
+		});
+    	roomList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Room>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Room> observable, Room oldValue, Room newValue) {
+				// TODO Auto-generated method stub
+				if(newValue != null) bedList.getItems().setAll(newValue.getBeds());
+				
+			}
+		});
+    	isRareChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				if(newValue.equals("否")) {
+					rareTypeChoice.getSelectionModel().clearSelection();
+					rareTypeChoice.setDisable(true);
+				} else {
+					rareTypeChoice.setDisable(false);
+				}
+			}
+		
+    	});
+    }
+    
+//[end]
+    
+    
+    
+    @Override
+	public void initialize(URL location, ResourceBundle resources) {
+		patientManagementInit();
+		buildingmanagementInit();
 	}
 
 }
