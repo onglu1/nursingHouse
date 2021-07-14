@@ -35,8 +35,14 @@
                                              <children>
                                                 <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
                                                    <children>
-                                                      <Button mnemonicParsing="false" onAction="#addPatient" text="新增" />
-                                                      <Button mnemonicParsing="false" onAction="#modify" text="修改" />
+                                                      <Button mnemonicParsing="false" onAction="#addPatient" text="新增">
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin></Button>
+                                                      <Button mnemonicParsing="false" onAction="#modify" text="修改">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin></Button>
                                                       <Button mnemonicParsing="false" onAction="#query" text="查询">
                                                          <HBox.margin>
                                                             <Insets left="80.0" />
@@ -44,12 +50,12 @@
                                                       </Button>
                                                       <ChoiceBox fx:id="searchChoice" prefHeight="23.0" prefWidth="131.0">
                                                          <HBox.margin>
-                                                            <Insets />
+                                                            <Insets left="5.0" />
                                                          </HBox.margin>
                                                       </ChoiceBox>
-                                                      <TextField fx:id="searchField" onKeyPressed="#enterPressed" prefHeight="23.0" prefWidth="536.0" promptText="键入你要查询的内容...">
+                                                      <TextField fx:id="searchField" onKeyPressed="#enterPressed" prefHeight="30.0" prefWidth="462.0" promptText="键入你要查询的内容...">
                                                          <HBox.margin>
-                                                            <Insets />
+                                                            <Insets left="5.0" />
                                                          </HBox.margin>
                                                       </TextField>
                                                    </children>
@@ -110,12 +116,12 @@
                                                       <ChoiceBox fx:id="bedManBedChoice" layoutX="255.0" layoutY="20.0" prefHeight="30.0" prefWidth="112.0" />
                                                       <Button mnemonicParsing="false" onAction="#checkInButtonFired" text="入住">
                                                          <HBox.margin>
-                                                            <Insets left="100.0" />
+                                                            <Insets left="40.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" text="退房">
+                                                      <Button mnemonicParsing="false" onAction="#findAvailableBedButtonFired" text="寻找空闲床位">
                                                          <HBox.margin>
-                                                            <Insets left="5.0" />
+                                                            <Insets left="10.0" />
                                                          </HBox.margin>
                                                       </Button>
                                                    </children>
@@ -154,47 +160,85 @@
                                                       <Insets top="15.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                                                <HBox alignment="BOTTOM_RIGHT" prefHeight="5.0" prefWidth="900.0">
                                                    <children>
-                                                      <Button mnemonicParsing="false" text="退院">
+                                                      <Button mnemonicParsing="false" onAction="#checkOutButtonFired" text="退院">
                                                          <HBox.margin>
                                                             <Insets left="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="93.0" text="床位对调" />
-                                                      <Button mnemonicParsing="false" text="查询">
+                                                      <Button mnemonicParsing="false" onAction="#swapBedButtonFired" prefHeight="30.0" prefWidth="93.0" text="床位对调">
                                                          <HBox.margin>
-                                                            <Insets left="80.0" />
-                                                         </HBox.margin>
-                                                      </Button>
-                                                      <ChoiceBox fx:id="bedSearchChoiceBox" prefHeight="23.0" prefWidth="131.0">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </ChoiceBox>
-                                                      <TextField fx:id="bedSearchField" prefHeight="30.0" prefWidth="482.0" promptText="键入你要查询的内容...">
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
-                                                      </TextField>
+                                                            <Insets left="5.0" right="50.0" />
+                                                         </HBox.margin></Button>
                                                    </children>
                                                    <VBox.margin>
                                                       <Insets top="10.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <TableView fx:id="bedTableView" prefHeight="383.0" prefWidth="900.0" stylesheets="@../css/Main.css">
+                                                <TableView fx:id="bedTableView" prefHeight="385.0" prefWidth="900.0" stylesheets="@../css/Main.css">
                                                    <VBox.margin>
-                                                      <Insets top="20.0" />
+                                                      <Insets top="10.0" />
                                                    </VBox.margin>
                                                 </TableView>
                                              </children>
                                           </VBox>
+                                          <Label fx:id="bedManInfoLabel" alignment="CENTER_RIGHT" layoutX="409.0" layoutY="4.0" prefHeight="20.0" prefWidth="489.0" />
                                        </children></AnchorPane>
                               </content>
                             </Tab>
                               <Tab text="稀有设备管理">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="213.0" layoutY="75.0" prefHeight="536.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+                                             <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="900.0">
+                                                   <children>
+                                                      <Label text="申请人：">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="rareAplicationPatientChoice" prefWidth="150.0" />
+                                                      <Label layoutX="10.0" layoutY="10.0" text="使用时长：">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="rareApplicationTimeField" prefHeight="30.0" prefWidth="84.0" />
+                                                      <Label layoutX="220.0" layoutY="10.0" />
+                                                      <Button mnemonicParsing="false" text="申请">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" text="查询">
+                                                         <HBox.margin>
+                                                            <Insets left="100.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <TextField fx:id="rareSearchField" prefHeight="30.0" prefWidth="234.0" promptText="请输入要搜索的稀有设施种类...">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                </HBox>
+                                                <TableView fx:id="rareTableView" prefHeight="511.0" prefWidth="900.0">
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
                                  </content>
                               </Tab>
                           </tabs>
@@ -284,6 +328,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
                                           <Label text="房间名：">
@@ -304,6 +349,8 @@
                                           <TextField fx:id="roomField" GridPane.columnIndex="1" />
                                           <ChoiceBox fx:id="isRareChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <ChoiceBox fx:id="rareTypeChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Label text="最大容量：" GridPane.rowIndex="3" />
+                                          <TextField fx:id="maxCapacityField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                        </children>
                                     </GridPane>
                                     <HBox alignment="CENTER" prefHeight="45.0" prefWidth="215.0">
@@ -341,8 +388,7 @@
                            </children>
                         </AnchorPane>
                         <Button layoutX="746.0" layoutY="511.0" mnemonicParsing="false" onAction="#preMenu" text="返回" />
-                        <Label fx:id="roomInfo1" layoutX="685.0" layoutY="41.0" prefHeight="20.0" prefWidth="163.0" text="Label" />
-                        <Label fx:id="roomInfo2" layoutX="685.0" layoutY="61.0" prefHeight="20.0" prefWidth="163.0" text="Label" />
+                        <Text fx:id="roomInfoField" layoutX="687.0" layoutY="49.234375" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="167.30029296875" />
                      </children>
                   </AnchorPane>
                </content>

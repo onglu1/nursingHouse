@@ -1,10 +1,8 @@
 package controller;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -31,6 +29,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -45,11 +44,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import main.AddPatient;
 import model.CheckInInfo;
 import model.Database;
@@ -318,16 +319,12 @@ public class MainInterfaceController implements Initializable{
     }
     
 //[end]
-
 //------------------------------------------------------床位管理--------------------------------------------------------------------
 //[start]
+    //[start]
 	private ObservableList<CheckInInfo> checkInInfoList = FXCollections.observableArrayList();
     @FXML
     private TableView<CheckInInfo> bedTableView;
-    @FXML
-    private ChoiceBox<String> bedSearchChoiceBox;
-    @FXML
-    private TextField bedSearchField;
     @FXML
     private ChoiceBox<Patient> checkInPatientChoiceBox;
     @FXML
@@ -344,14 +341,117 @@ public class MainInterfaceController implements Initializable{
     @FXML
     private DatePicker checkOutDatePicker;
     @FXML
+    private Label bedManInfoLabel;
+    //[end]
+    //入住按钮触发事件
+    @FXML
     private void checkInButtonFired() {
-    	System.out.println(checkInDatePicker.getValue());
+    	boolean isOk = true;
+    	isOk &= bedManBuildingChoice.getSelectionModel().getSelectedItem() != null;
+    	isOk &= bedManLevelChoice.getSelectionModel().getSelectedItem() != null;
+    	isOk &= bedManRoomChoice.getSelectionModel().getSelectedItem() != null;
+    	isOk &= bedManBedChoice.getSelectionModel().getSelectedItem() != null;
+    	if(!isOk) {
+    		Alert alert = new Alert(AlertType.ERROR, "未选择床号");
+    		alert.show();
+    		return ;
+    	}
+    	isOk &= checkInPatientChoiceBox.getSelectionModel().getSelectedItem() != null;
+    	if(!isOk) {
+    		Alert alert = new Alert(AlertType.ERROR, "未选择入住人");
+    		alert.show();
+    		return ;
+    	}
+    	isOk &= checkInDatePicker.getValue() != null;
+    	isOk &= checkOutDatePicker.getValue() != null;
+    	if(!isOk) {
+    		Alert alert = new Alert(AlertType.ERROR, "未选择入住时间");
+    		alert.show();
+    		return ;
+    	}
+    	if(checkInDatePicker.getValue().isAfter(checkOutDatePicker.getValue())) {
+    		Alert alert = new Alert(AlertType.ERROR, "时间选择有误（离开时间晚于入住时间）");
+    		alert.show();
+    		return ;
+    	}
+    	if(bedManBedChoice.getSelectionModel().getSelectedItem().getOwner() != null) {
+    		Alert alert = new Alert(AlertType.ERROR, "所选床位已经被占用");
+    		alert.show();
+    		return ;
+    	}
+    	bedManBedChoice.getSelectionModel().getSelectedItem().setOwner(checkInPatientChoiceBox.getSelectionModel().getSelectedItem());
+    	Database.getInstance().getCheckInInfos().add(new CheckInInfo(bedManBedChoice.getSelectionModel().getSelectedItem()
+    			, checkInPatientChoiceBox.getSelectionModel().getSelectedItem()
+    			, checkInDatePicker.getValue()
+    			, checkOutDatePicker.getValue()
+    			, true));
+    	bedManInfoLabel.setText("");
+    	bedManagementInit();
+    	
     }
+    //找到空闲床位
+    @FXML
+    private void findAvailableBedButtonFired() {
+    	for(Building building : Database.getInstance().getBuildings()) {
+    		for(Level level : building.getLevels()) {
+    			for(Room room : level.getRooms()) {
+    				for(Bed bed : room.getBeds()) {
+    					if(bed.getOwner() == null) {
+    						setSelectedBed(bed);
+    						return ;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	Alert alert = new Alert(AlertType.ERROR, "暂无可用床位");
+    	alert.show();
+    	return ;
+    }
+    //办理退房
+    @FXML
+    private void checkOutButtonFired() {
+    	if(bedTableView.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "您尚未在表格中选择记录");
+    		alert.show();
+    		return ;
+    	}
+    	CheckInInfo checkInInfo = bedTableView.getSelectionModel().getSelectedItem();
+    	checkInInfo.setInBed(false);
+    	checkInInfo.getBed().setOwner(null);
+    	bedManagementInit();
+    	return ;
+    }
+    //调换床位
+    @FXML
+    private void swapBedButtonFired() {
+    	if(bedTableView.getSelectionModel().getSelectedItems().size() != 2) {
+    		Alert alert = new Alert(AlertType.ERROR, "选择的床位不正确（需要恰好两个选择）");
+    		alert.show();
+    		return ;
+    	}
+    	Bed bed0 = bedTableView.getSelectionModel().getSelectedItems().get(0).getBed();
+    	Bed bed1 = bedTableView.getSelectionModel().getSelectedItems().get(1).getBed();
+    	Patient patient0 = bedTableView.getSelectionModel().getSelectedItems().get(0).getPatient();
+    	Patient patient1 = bedTableView.getSelectionModel().getSelectedItems().get(1).getPatient();
+    	bed0.setOwner(patient1);
+    	bed1.setOwner(patient0);
+    	bedTableView.getSelectionModel().getSelectedItems().get(0).setBed(bed1);
+    	bedTableView.getSelectionModel().getSelectedItems().get(1).setBed(bed0);
+    	bedManagementInit();
+    	return ;
+    }
+    //初始化床位管理系统
     @FXML
     private void bedManagementInit() {
+    	//------------------------------------------------------还原所有栏目-----------------------------------------------------------
+    	bedManInfoLabel.setText("");
+    	checkInInfoList.clear();
+    	bedTableView.getColumns().clear();
+    	bedTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    	refreshcheckInPatientChoiceBox();
 		//------------------------------------------------------表格展示-----------------------------------------------------------
     	//[start]
-		bedSearchField.setText("");
     	checkInInfoList.setAll(Database.getInstance().getCheckInInfos());
 		bedTableView.setItems(checkInInfoList);
 		TableColumn<CheckInInfo, String> positionColumn = new TableColumn<CheckInInfo, String>("位置");
@@ -474,6 +574,7 @@ public class MainInterfaceController implements Initializable{
 				bedManLevelChoice.setDisable(false);
 				bedManRoomChoice.setDisable(true);
 				bedManBedChoice.setDisable(true);
+				bedManInfoLabel.setText("");
 				bedManLevelChoice.getItems().setAll(newValue.getLevels());
 				
 			}
@@ -489,6 +590,7 @@ public class MainInterfaceController implements Initializable{
 				bedManBedChoice.getSelectionModel().clearSelection();
 				bedManRoomChoice.setDisable(false);
 				bedManBedChoice.setDisable(true);
+				bedManInfoLabel.setText("");
 				bedManRoomChoice.getItems().setAll(newValue.getRooms());
 				
 			}
@@ -502,50 +604,188 @@ public class MainInterfaceController implements Initializable{
 				if(newValue == oldValue) return ;
 				bedManBedChoice.getSelectionModel().clearSelection();
 				bedManBedChoice.setDisable(false);
+				bedManInfoLabel.setText("");
 				bedManBedChoice.getItems().setAll(newValue.getBeds());
 				
 				
 				
 			}
 		});
+		bedManBedChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Bed>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Bed> observable, Bed oldValue, Bed newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+//				if(newValue == oldValue) return ;
+
+				bedManInfoLabel.setText(newValue.getName() + (newValue.getOwner() == null ? "：空闲" : (" 占有者：" + newValue.getOwner().getName())));
+				
+			}
+
+
+		});
 		//[end]
-		//入住人监听器
+		//入住人刷新
 		refreshcheckInPatientChoiceBox();
-		
-		
-//		bedManBedChoice.
-//		searchChoice.getItems().add("姓名");
-//		searchChoice.getItems().add("年龄");
-//		searchChoice.getItems().add("身份证号码");
-//		searchChoice.getItems().add("性别");
-//		searchChoice.getItems().add("联系电话");
-//		searchChoice.getItems().add("紧急联系人");
-//		searchChoice.getItems().add("紧急联系电话");
-//		searchChoice.getSelectionModel().select("姓名");
-    	
     }
+    //设置选择框里的床位
+    private void setSelectedBed(Bed bed) {
+    	Room room = bed.getFather();
+    	Level level = room.getFather();
+    	Building building = level.getFather();
+    	bedManBuildingChoice.getSelectionModel().select(building);
+    	bedManLevelChoice.getSelectionModel().select(level);
+    	bedManRoomChoice.getSelectionModel().select(room);
+    	bedManBedChoice.getSelectionModel().select(bed);
+    	return ;
+    }
+
+    //刷新入住人choicebox
     void refreshcheckInPatientChoiceBox() {
     	ArrayList<Patient> tmp = new ArrayList<Patient>();
     	for(Patient patient : Database.getInstance().getPatients()) {
     		tmp.add(patient);
     	}
     	checkInPatientChoiceBox.getItems().setAll(tmp);
+    	//设置展示内容
+    	checkInPatientChoiceBox.setConverter(new StringConverter<Patient>() {
+			
+			@Override
+			public String toString(Patient object) {
+				// TODO Auto-generated method stub
+				return object.getName() + "-" + object.getId();
+			}
+			
+			@Override
+			public Patient fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
     	checkInPatientChoiceBox.getSelectionModel().clearSelection();
-    	System.out.println("qwq");
-    	if(checkInDatePicker.getValue() != null) {
-    		System.out.println(checkInDatePicker.getValue());
-    	}
-    	
+    	checkInDatePicker.setValue(null);
+    	checkOutDatePicker.setValue(null);
+    	bedManBuildingChoice.getSelectionModel().clearSelection();
+		bedManLevelChoice.getSelectionModel().clearSelection();
+		bedManRoomChoice.getSelectionModel().clearSelection();
+		bedManBedChoice.getSelectionModel().clearSelection();
+		bedManLevelChoice.setDisable(true);
+		bedManRoomChoice.setDisable(true);
+		bedManBedChoice.setDisable(true);
     	
     }
 //[end]
-//----------------------------------------------------稀有设备管理--------------------------------------------------------------------
+//----------------------------------------------------稀有设备管理------------------------------------------------------------------
+//[start]
+
+//	private ObservableList<CheckInInfo> checkInInfoList = FXCollections.observableArrayList();
+//    private TableView<CheckInInfo> bedTableView;
+    private ObservableList<Room> rareRoomList = FXCollections.observableArrayList();
+    @FXML
+    private ChoiceBox<Patient> rareAplicationPatientChoice;
+    @FXML
+    private TextField rareApplicationTimeField;
+    @FXML
+    private TextField rareSearchField;
+    @FXML
+    private TableView<Room> rareTableView;
+    
+    //稀有设备管理界面初始化
+    private void rareManagementInit() {
+    	//初始化表格
+    	//[start]
+    	for(Building buidling : Database.getInstance().getBuildings()) {
+    		for(Level level : buidling.getLevels()) {
+    			for(Room room : level.getRooms()) {
+    				if(room.isRareRoom()) {
+    					rareRoomList.add(room);
+    				}
+    			}
+    		}
+    	}
+    	rareTableView.setItems(rareRoomList);
+    	TableColumn<Room, String> roomTypeColumn = new TableColumn<Room, String>("房间种类");
+    	TableColumn<Room, String> roomPositionColumn = new TableColumn<Room, String>("位置");
+    	TableColumn<Room, String> maxCapacityColumn = new TableColumn<Room, String>("最大容纳人数");
+    	TableColumn<Room, String> resCapacityColumn = new TableColumn<Room, String>("剩余容纳人数");
+    	roomTypeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Room,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Room, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getType(param.getValue().getRareType()));
+				return str;
+			}
+		});
+    	roomPositionColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Room,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Room, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				Room room = param.getValue();
+				Level level = room.getFather();
+				Building building = level.getFather();
+				str.setValue(building.getName() + "->"
+						+ level.getName() + "->"
+						+ room.getName());
+				return str;
+			}
+		});
+    	maxCapacityColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Room,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Room, String> param) {
+				// TODO Auto-generated method stub
+				
+				return new SimpleStringProperty(String.valueOf(param.getValue().getMaxCapacity()));
+			}
+		});
+    	resCapacityColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Room,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Room, String> param) {
+				// TODO Auto-generated method stub
+				
+				return new SimpleStringProperty(String.valueOf(param.getValue().getResCapacity()));
+			}
+		});
+    	rareTableView.getColumns().add(roomTypeColumn);
+    	rareTableView.getColumns().add(roomPositionColumn);
+    	rareTableView.getColumns().add(maxCapacityColumn);
+    	rareTableView.getColumns().add(resCapacityColumn);
+    	rareTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    	//[end]
+ 
+    	//初始化choicebox
+    	rareAplicationPatientChoice.getItems().setAll(Database.getInstance().getPatients());
+    	//输入框监听器
+//    	rareAplicationPatientChoice.set
+    	rareApplicationTimeField.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(!Pattern.matches("[0-9]{0,6}", newValue)) {
+					rareApplicationTimeField.setText(oldValue);
+				}
+			}
+		});
+    	
+    }
+//[end]
+    
 //------------------------------------------------------评估管理--------------------------------------------------------------------
 
 //------------------------------------------------------楼宇管理--------------------------------------------------------------------
 //[start]
     //[start]
 
+    @FXML
+    private TextField maxCapacityField;
     @FXML
     private ListView<Building> buildingList;
     @FXML
@@ -571,15 +811,15 @@ public class MainInterfaceController implements Initializable{
     private ChoiceBox<String> isRareChoice;
     @FXML
     private ChoiceBox<String> rareTypeChoice;
-    @FXML
-    private Label roomInfo1;
-    @FXML
-    private Label roomInfo2;
+
     
     @FXML
     private VBox bedModifier;
     @FXML
     private TextField bedField;
+    
+    @FXML
+    private Text roomInfoField;
     
     //[end]
     
@@ -711,7 +951,10 @@ public class MainInterfaceController implements Initializable{
     	} else if(isRareChoice.getSelectionModel().getSelectedItem().equals("是") && rareTypeChoice.getSelectionModel().getSelectedItem() == null) {
     		Alert alert = new Alert(AlertType.ERROR, "请选择稀有房间类型");
     		alert.show();
-    	} else {
+    	} else if(isRareChoice.getSelectionModel().getSelectedItem().equals("是") && maxCapacityField.getText().equals("")) {
+    		Alert alert = new Alert(AlertType.ERROR, "请输入最大容量限制");
+    		alert.show();
+    	}else {
     		String name = roomField.getText();
     		for(Room room : father.getRooms()) {
     			if(room.getName().equals(name)) {
@@ -720,15 +963,17 @@ public class MainInterfaceController implements Initializable{
     	    		return ;
     			}
     		}
-//    		System.out.println(father);
     		if(isRareChoice.getSelectionModel().getSelectedItem().equals("是")) {
-    			father.getRooms().add(new Room(roomField.getText(), true, Room.getTypeByChinese(rareTypeChoice.getSelectionModel().getSelectedItem()), father));
+        		int capacity = Integer.parseInt(maxCapacityField.getText());
+    			father.getRooms().add(new Room(roomField.getText(), true
+    					, Room.getTypeByChinese(rareTypeChoice.getSelectionModel().getSelectedItem()), father
+    					, capacity, capacity));
     		} else {
-    			System.out.println(father.getRooms() == null);
     			father.getRooms().add(new Room(roomField.getText(), false, father));
     		}
     		roomList.getItems().setAll(father.getRooms());
     		roomField.setText("");
+    		maxCapacityField.setText("");
     		isRareChoice.getSelectionModel().clearSelection();
     		rareTypeChoice.getSelectionModel().clearSelection();
     	}
@@ -804,11 +1049,12 @@ public class MainInterfaceController implements Initializable{
     	roomModifier.setVisible(false);
     	bedModifier.setVisible(false);
     	//设置房间信息展示栏
-    	roomInfo1.setText("");
-    	roomInfo2.setText("");
+    	roomInfoField.setText("");
     	//添加房间选项栏
     	isRareChoice.getItems().addAll("是", "否");
-    	rareTypeChoice.getItems().addAll("健身房", "淋浴房");
+    	for(String string : Room.RARETYPES) {
+    		rareTypeChoice.getItems().addAll(string);
+    	}
     	//添加切换窗口的监听器
     	ObservableList<Building> obl = buildingList.getItems();
     	obl.setAll(Database.getInstance().getBuildings());
@@ -838,13 +1084,15 @@ public class MainInterfaceController implements Initializable{
 			public void changed(ObservableValue<? extends Room> observable, Room oldValue, Room newValue) {
 				// TODO Auto-generated method stub
 				if(newValue != null) {
-					roomInfo1.setText("是否为稀有房间：" + (newValue.isRareRoom() ? "是" :"否"));
+					roomInfoField.setText("是否为稀有房间：" + (newValue.isRareRoom() ? "是" :"否"));
 					if(newValue.isRareRoom())
-						roomInfo2.setText("房间种类：" + Room.getType(newValue.getRareType()));
+						roomInfoField.setText(roomInfoField.getText() 
+								+ "\n" + "房间种类：" + Room.getType(newValue.getRareType())
+								+ "\n" + "最大容量：" + newValue.getMaxCapacity()
+								+ "\n" + "剩余容量：" + newValue.getResCapacity());
 					bedList.getItems().setAll(newValue.getBeds());
 				} else {
-					roomInfo1.setText("");
-					roomInfo2.setText("");
+					roomInfoField.setText("");
 				}
 				
 			}
@@ -856,12 +1104,10 @@ public class MainInterfaceController implements Initializable{
 				// TODO Auto-generated method stub
 				if(newValue != null) {
 					if(newValue.getOwner() != null)
-						roomInfo1.setText(newValue.getName() + "，占有者：" + newValue.getOwner().toString());
-					else roomInfo1.setText(newValue.getName() + "：当前空闲");
-					roomInfo2.setText("");
+						roomInfoField.setText(newValue.getName() + "，占有者：" + newValue.getOwner().toString());
+					else roomInfoField.setText(newValue.getName() + "：当前空闲");
 				} else {
-					roomInfo1.setText("");
-					roomInfo2.setText("");
+					roomInfoField.setText("");
 				}
 				
 			}
@@ -876,8 +1122,10 @@ public class MainInterfaceController implements Initializable{
 					if(rareTypeChoice.getSelectionModel() != null)
 						rareTypeChoice.getSelectionModel().clearSelection();
 					rareTypeChoice.setDisable(true);
+					maxCapacityField.setDisable(true);
 				} else if(newValue.equals("是")){
 					rareTypeChoice.setDisable(false);
+					maxCapacityField.setDisable(false);
 				}
 			}
 		
@@ -894,8 +1142,10 @@ public class MainInterfaceController implements Initializable{
 					bedModifier.setVisible(false);
 				}
 				if(newValue == false) {
-					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused()) {
 						buildingModifier.setVisible(false); 
+						buildingField.setText("");
+					}
 				}
 				
 			}
@@ -914,10 +1164,11 @@ public class MainInterfaceController implements Initializable{
 					}
 				}
 				if(newValue == false) {
-					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused()) {
 						levelModifier.setVisible(false); 
+			    		levelField.setText("");
+					}
 				}
-				
 			}
 		});
     	roomList.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -934,8 +1185,14 @@ public class MainInterfaceController implements Initializable{
 					}
 				}
 				if(newValue == false) {
-					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused()) {
 						roomModifier.setVisible(false); 
+
+			    		roomField.setText("");
+			    		maxCapacityField.setText("");
+			    		isRareChoice.getSelectionModel().clearSelection();
+			    		rareTypeChoice.getSelectionModel().clearSelection();
+					}
 				}
 				
 			}
@@ -954,22 +1211,33 @@ public class MainInterfaceController implements Initializable{
 					}
 				}
 				if(newValue == false) {
-					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused())
+					if(buildingList.isFocused() || levelList.isFocused() || roomList.isFocused() || bedList.isFocused()) {
 						bedModifier.setVisible(false); 
+						bedField.setText("");
+					}
 				}
 				
+			}
+		});
+    	maxCapacityField.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(!Pattern.matches("[0-9]{0,3}", newValue))
+						maxCapacityField.setText(oldValue);
+				return ;
 			}
 		});
     }
     
 //[end]
-    
-    
-    
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		patientManagementInit();
 		bedManagementInit();
+		rareManagementInit();
 		buildingManagementInit();
 	}
 
