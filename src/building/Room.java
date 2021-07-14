@@ -7,17 +7,27 @@ public class Room {
 	public final static int BATHROOM = "bathroom".hashCode();
 	private String name;
 	private boolean isRareRoom;
-	private int RareType;
-	private ArrayList<Bed> beds;
-	
-	public Room() {
-		beds = new ArrayList<Bed>();
+	public Level getFather() {
+		return father;
 	}
 
-	public Room(String name, boolean isRareRoom) {
+	public void setFather(Level father) {
+		this.father = father;
+	}
+	private int RareType;
+	private ArrayList<Bed> beds;
+	private Level father;
+	
+	public Room(Level father) {
+		beds = new ArrayList<Bed>();
+		this.father = father;
+	}
+
+	public Room(String name, boolean isRareRoom, Level father) {
 		beds = new ArrayList<Bed>();
 		this.name = name;
 		this.isRareRoom = isRareRoom;
+		this.father = father;
 	}
 	
 	public String getName() {
@@ -29,11 +39,12 @@ public class Room {
 	}
 
 
-	public Room(String name, boolean isRareRoom, int rareType) {
+	public Room(String name, boolean isRareRoom, int rareType, Level father) {
 		beds = new ArrayList<Bed>();
 		this.name = name;
 		this.isRareRoom = isRareRoom;
 		RareType = rareType;
+		this.father = father;
 	}
 
 	public boolean isRareRoom() {

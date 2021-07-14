@@ -1,6 +1,10 @@
 package controller;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -20,11 +24,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -47,6 +51,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import main.AddPatient;
+import model.CheckInInfo;
 import model.Database;
 import model.Patient;
 
@@ -313,6 +318,228 @@ public class MainInterfaceController implements Initializable{
     }
     
 //[end]
+
+//------------------------------------------------------床位管理--------------------------------------------------------------------
+//[start]
+	private ObservableList<CheckInInfo> checkInInfoList = FXCollections.observableArrayList();
+    @FXML
+    private TableView<CheckInInfo> bedTableView;
+    @FXML
+    private ChoiceBox<String> bedSearchChoiceBox;
+    @FXML
+    private TextField bedSearchField;
+    @FXML
+    private ChoiceBox<Patient> checkInPatientChoiceBox;
+    @FXML
+    private ChoiceBox<Building> bedManBuildingChoice;
+    @FXML
+    private ChoiceBox<Level> bedManLevelChoice;
+    @FXML
+    private ChoiceBox<Room> bedManRoomChoice;
+    @FXML
+    private ChoiceBox<Bed> bedManBedChoice;
+    
+    @FXML
+    private DatePicker checkInDatePicker;
+    @FXML
+    private DatePicker checkOutDatePicker;
+    @FXML
+    private void checkInButtonFired() {
+    	System.out.println(checkInDatePicker.getValue());
+    }
+    @FXML
+    private void bedManagementInit() {
+		//------------------------------------------------------表格展示-----------------------------------------------------------
+    	//[start]
+		bedSearchField.setText("");
+    	checkInInfoList.setAll(Database.getInstance().getCheckInInfos());
+		bedTableView.setItems(checkInInfoList);
+		TableColumn<CheckInInfo, String> positionColumn = new TableColumn<CheckInInfo, String>("位置");
+		TableColumn<CheckInInfo, String> checkInTimeColumn = new TableColumn<CheckInInfo, String>("入住开始时间");
+		TableColumn<CheckInInfo, String> checkOutTimeColumn = new TableColumn<CheckInInfo, String>("入住结束时间");
+		TableColumn<CheckInInfo, String> stateColumn = new TableColumn<CheckInInfo, String>("状态");
+		TableColumn<CheckInInfo, String> nameColumn = new TableColumn<CheckInInfo, String>("姓名");
+		TableColumn<CheckInInfo, String> sexColumn = new TableColumn<CheckInInfo, String>("性别");
+		TableColumn<CheckInInfo, String> ageColumn = new TableColumn<CheckInInfo, String>("年龄");
+		positionColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				Bed bed = param.getValue().getBed();
+				Room room = bed.getFather();
+				Level level = room.getFather();
+				Building building = level.getFather();
+				str.setValue(building.getName() + "->"
+						+ level.getName() + "->"
+						+ room.getName() + "->"
+						+ bed.getName());
+				return str;
+			}
+		});
+		checkInTimeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				LocalDate date = param.getValue().getCheckInTime();
+				str.setValue(date.toString());
+				return str;
+			}
+		});
+		checkOutTimeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				LocalDate date = param.getValue().getCheckOutTime();
+				str.setValue(date.toString());
+				return str;
+			}
+		});
+		stateColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				return new SimpleStringProperty(param.getValue().isInBed() ? "入住中" : "已出院");
+			}
+		});
+		nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				return new SimpleStringProperty(param.getValue().getPatient().getName());
+			}
+		});
+		sexColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				return new SimpleStringProperty(param.getValue().getPatient().getSex() ? "男" : "女");
+			}
+		});
+		ageColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CheckInInfo,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<CheckInInfo, String> param) {
+				// TODO Auto-generated method stub
+				return new SimpleStringProperty(String.valueOf(param.getValue().getPatient().getAge()));
+			}
+		});
+		
+		positionColumn.setPrefWidth(250);
+		checkInTimeColumn.setPrefWidth(130);
+		checkOutTimeColumn.setPrefWidth(130);
+		positionColumn.setResizable(false);
+		checkInTimeColumn.setResizable(false);
+		checkOutTimeColumn.setResizable(false);
+		stateColumn.setResizable(false);
+		nameColumn.setResizable(false);
+		sexColumn.setResizable(false);
+		ageColumn.setResizable(false);
+		bedTableView.getColumns().add(positionColumn);
+		bedTableView.getColumns().add(checkInTimeColumn);
+		bedTableView.getColumns().add(checkOutTimeColumn);
+		bedTableView.getColumns().add(stateColumn);
+		bedTableView.getColumns().add(nameColumn);
+		bedTableView.getColumns().add(sexColumn);
+		bedTableView.getColumns().add(ageColumn);
+		//[end]
+		//---------------------------------------------------楼层选择框监听器------------------------------------------------------
+		//[start]
+		bedManBuildingChoice.getItems().setAll(Database.getInstance().getBuildings());
+		bedManLevelChoice.setDisable(true);
+		bedManRoomChoice.setDisable(true);
+		bedManBedChoice.setDisable(true);
+		bedManBuildingChoice.getSelectionModel().clearSelection();
+		bedManLevelChoice.getSelectionModel().clearSelection();
+		bedManRoomChoice.getSelectionModel().clearSelection();
+		bedManBedChoice.getSelectionModel().clearSelection();
+		bedManBuildingChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Building>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Building> observable, Building oldValue, Building newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == oldValue) return ;
+				bedManLevelChoice.getSelectionModel().clearSelection();
+				bedManRoomChoice.getSelectionModel().clearSelection();
+				bedManBedChoice.getSelectionModel().clearSelection();
+				bedManLevelChoice.setDisable(false);
+				bedManRoomChoice.setDisable(true);
+				bedManBedChoice.setDisable(true);
+				bedManLevelChoice.getItems().setAll(newValue.getLevels());
+				
+			}
+		});
+		bedManLevelChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Level>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Level> observable, Level oldValue, Level newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == oldValue) return ;
+				bedManRoomChoice.getSelectionModel().clearSelection();
+				bedManBedChoice.getSelectionModel().clearSelection();
+				bedManRoomChoice.setDisable(false);
+				bedManBedChoice.setDisable(true);
+				bedManRoomChoice.getItems().setAll(newValue.getRooms());
+				
+			}
+		});
+		bedManRoomChoice.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Room>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Room> observable, Room oldValue, Room newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue == oldValue) return ;
+				bedManBedChoice.getSelectionModel().clearSelection();
+				bedManBedChoice.setDisable(false);
+				bedManBedChoice.getItems().setAll(newValue.getBeds());
+				
+				
+				
+			}
+		});
+		//[end]
+		//入住人监听器
+		refreshcheckInPatientChoiceBox();
+		
+		
+//		bedManBedChoice.
+//		searchChoice.getItems().add("姓名");
+//		searchChoice.getItems().add("年龄");
+//		searchChoice.getItems().add("身份证号码");
+//		searchChoice.getItems().add("性别");
+//		searchChoice.getItems().add("联系电话");
+//		searchChoice.getItems().add("紧急联系人");
+//		searchChoice.getItems().add("紧急联系电话");
+//		searchChoice.getSelectionModel().select("姓名");
+    	
+    }
+    void refreshcheckInPatientChoiceBox() {
+    	ArrayList<Patient> tmp = new ArrayList<Patient>();
+    	for(Patient patient : Database.getInstance().getPatients()) {
+    		tmp.add(patient);
+    	}
+    	checkInPatientChoiceBox.getItems().setAll(tmp);
+    	checkInPatientChoiceBox.getSelectionModel().clearSelection();
+    	System.out.println("qwq");
+    	if(checkInDatePicker.getValue() != null) {
+    		System.out.println(checkInDatePicker.getValue());
+    	}
+    	
+    	
+    }
+//[end]
+//----------------------------------------------------稀有设备管理--------------------------------------------------------------------
 //------------------------------------------------------评估管理--------------------------------------------------------------------
 
 //------------------------------------------------------楼宇管理--------------------------------------------------------------------
@@ -442,7 +669,7 @@ public class MainInterfaceController implements Initializable{
     	    		return ;
     			}
     		}
-    		father.getLevels().add(new Level(name));
+    		father.getLevels().add(new Level(name, father));
     		levelList.getItems().setAll(father.getLevels());
     		levelField.setText("");
     		
@@ -495,10 +722,10 @@ public class MainInterfaceController implements Initializable{
     		}
 //    		System.out.println(father);
     		if(isRareChoice.getSelectionModel().getSelectedItem().equals("是")) {
-    			father.getRooms().add(new Room(roomField.getText(), true, Room.getTypeByChinese(rareTypeChoice.getSelectionModel().getSelectedItem())));
+    			father.getRooms().add(new Room(roomField.getText(), true, Room.getTypeByChinese(rareTypeChoice.getSelectionModel().getSelectedItem()), father));
     		} else {
     			System.out.println(father.getRooms() == null);
-    			father.getRooms().add(new Room(roomField.getText(), false));
+    			father.getRooms().add(new Room(roomField.getText(), false, father));
     		}
     		roomList.getItems().setAll(father.getRooms());
     		roomField.setText("");
@@ -544,7 +771,7 @@ public class MainInterfaceController implements Initializable{
     	    		return ;
     			}
     		}
-    		father.getBeds().add(new Bed(name));
+    		father.getBeds().add(new Bed(name, father));
     		bedList.getItems().setAll(father.getBeds());
     		bedField.setText("");
     		
@@ -565,13 +792,13 @@ public class MainInterfaceController implements Initializable{
     		Optional<ButtonType> result = alert.showAndWait();
     		if(result.get() == ButtonType.OK) {
     			father.getBeds().remove(bedList.getSelectionModel().getSelectedItem());
-        		bedList.getItems().setAll(father.getBeds());
+    			bedList.getItems().setAll(father.getBeds());
     		}
     	}
     	
     }
     //楼宇管理初始化
-    void buildingmanagementInit() {
+    void buildingManagementInit() {
     	buildingModifier.setVisible(false);
     	levelModifier.setVisible(false);
     	roomModifier.setVisible(false);
@@ -742,7 +969,8 @@ public class MainInterfaceController implements Initializable{
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		patientManagementInit();
-		buildingmanagementInit();
+		bedManagementInit();
+		buildingManagementInit();
 	}
 
 }

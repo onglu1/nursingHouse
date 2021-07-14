@@ -5,6 +5,7 @@ import model.Patient;
 public class Bed {
 	private String name;
 	private Patient owner;
+	private Room father;
 	public String getName() {
 		return name;
 	}
@@ -17,15 +18,23 @@ public class Bed {
 	public void setOwner(Patient owner) {
 		this.owner = owner;
 	}
-	public Bed() {
-		super();
+	public Bed(Room father) {
+		this.father = father;
 	}
-	public Bed(String name) {
+	public Bed(String name, Room father) {
 		this.name = name;
+		this.father = father;
 	}
-	public Bed(String name, Patient owner) {
+	public Bed(String name, Patient owner, Room father) {
 		this.name = name;
 		this.owner = owner;
+		this.father = father;
+	}
+	public Room getFather() {
+		return father;
+	}
+	public void setFather(Room father) {
+		this.father = father;
 	}
 	@Override
 	public String toString() {

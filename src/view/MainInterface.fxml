@@ -31,7 +31,7 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <VBox layoutX="205.0" layoutY="99.0" prefHeight="532.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
+                                          <VBox layoutX="205.0" layoutY="88.0" prefHeight="523.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0">
                                              <children>
                                                 <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
                                                    <children>
@@ -53,6 +53,9 @@
                                                          </HBox.margin>
                                                       </TextField>
                                                    </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" />
+                                                   </VBox.margin>
                                                 </HBox>
                                                 <TableView fx:id="patientTableView" prefHeight="560.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
                                              </children>
@@ -61,9 +64,132 @@
                                     </AnchorPane>
                               </content>
                             </Tab>
-                            <Tab text="床位管理">
+                            <Tab onSelectionChanged="#bedManagementInit" text="床位管理">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutY="88.0" prefHeight="520.0" prefWidth="900.0">
+                                             <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="900.0">
+                                                   <children>
+                                                      <Label text="楼号：">
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="bedManBuildingChoice" prefHeight="30.0" prefWidth="97.0" />
+                                                      <Label layoutX="10.0" layoutY="25.0" text="楼层：">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="bedManLevelChoice" layoutX="55.0" layoutY="20.0" prefHeight="30.0" prefWidth="103.0" />
+                                                      <Label layoutX="110.0" layoutY="25.0" text="房间：">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="bedManRoomChoice" layoutX="155.0" layoutY="20.0" prefHeight="30.0" prefWidth="100.0" />
+                                                      <Label layoutX="210.0" layoutY="25.0" text="床位：">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="bedManBedChoice" layoutX="255.0" layoutY="20.0" prefHeight="30.0" prefWidth="112.0" />
+                                                      <Button mnemonicParsing="false" onAction="#checkInButtonFired" text="入住">
+                                                         <HBox.margin>
+                                                            <Insets left="100.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" text="退房">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="900.0">
+                                                   <children>
+                                                      <Label text="入住人：">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="checkInPatientChoiceBox" prefHeight="30.0" prefWidth="267.0" />
+                                                      <Label text="入住时间：">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <DatePicker fx:id="checkInDatePicker" prefHeight="30.0" prefWidth="122.0" />
+                                                      <Label layoutX="224.0" layoutY="15.0" text="结束时间：">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <DatePicker fx:id="checkOutDatePicker" layoutX="304.0" layoutY="11.0" prefHeight="30.0" prefWidth="141.0" />
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="15.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" text="退院">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="93.0" text="床位对调" />
+                                                      <Button mnemonicParsing="false" text="查询">
+                                                         <HBox.margin>
+                                                            <Insets left="80.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <ChoiceBox fx:id="bedSearchChoiceBox" prefHeight="23.0" prefWidth="131.0">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </ChoiceBox>
+                                                      <TextField fx:id="bedSearchField" prefHeight="30.0" prefWidth="482.0" promptText="键入你要查询的内容...">
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <TableView fx:id="bedTableView" prefHeight="383.0" prefWidth="900.0" stylesheets="@../css/Main.css">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
                               <Tab text="稀有设备管理">
@@ -147,7 +273,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox fx:id="roomModifier" alignment="TOP_CENTER" layoutY="71.0" prefHeight="180.0" prefWidth="215.0">
+                              <VBox fx:id="roomModifier" alignment="TOP_CENTER" layoutY="71.0" prefHeight="180.0" prefWidth="215.0" visible="false">
                                  <children>
                                     <GridPane prefHeight="140.0" prefWidth="215.0">
                                       <columnConstraints>
