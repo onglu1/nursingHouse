@@ -204,7 +204,7 @@
                                                          </HBox.margin>
                                                       </Label>
                                                       <ChoiceBox fx:id="rareAplicationPatientChoice" prefWidth="150.0" />
-                                                      <Label layoutX="10.0" layoutY="10.0" text="使用时长：">
+                                                      <Label layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="115.0" text="使用时长(时)：">
                                                          <font>
                                                             <Font size="16.0" />
                                                          </font>
@@ -214,17 +214,22 @@
                                                       </Label>
                                                       <TextField fx:id="rareApplicationTimeField" prefHeight="30.0" prefWidth="84.0" />
                                                       <Label layoutX="220.0" layoutY="10.0" />
-                                                      <Button mnemonicParsing="false" text="申请">
+                                                      <Button mnemonicParsing="false" onAction="#rareRoomApplicationButtonFired" text="申请">
                                                          <HBox.margin>
                                                             <Insets left="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button mnemonicParsing="false" text="查询">
+                                                      <Button mnemonicParsing="false" onAction="#rareRoomRefresh" text="刷新">
                                                          <HBox.margin>
-                                                            <Insets left="100.0" />
+                                                            <Insets left="20.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <TextField fx:id="rareSearchField" prefHeight="30.0" prefWidth="234.0" promptText="请输入要搜索的稀有设施种类...">
+                                                      <Button mnemonicParsing="false" onAction="#rareRoomSearchButtonFired" text="查询">
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <TextField fx:id="rareSearchField" onKeyPressed="#rareSearchFieldKeyPressed" prefHeight="30.0" prefWidth="243.0" promptText="请输入要搜索的稀有设施种类...">
                                                          <HBox.margin>
                                                             <Insets left="5.0" />
                                                          </HBox.margin>

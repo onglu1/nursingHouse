@@ -29,9 +29,9 @@ public class Database{
 		buildings.add(new Building("一号楼"));
 		buildings.add(new Building("二号楼"));
 		buildings.get(0).getLevels().add(new Level("一楼", buildings.get(0)));
-		buildings.get(0).getLevels().get(0).getRooms().add(new Room("304", true, Room.BATHROOM, buildings.get(0).getLevels().get(0), 100, 50));
+		buildings.get(0).getLevels().get(0).getRooms().add(new Room("304", true, Room.BATHROOM, buildings.get(0).getLevels().get(0), 3, 3));
 		buildings.get(0).getLevels().add(new Level("二楼", buildings.get(0)));
-		buildings.get(0).getLevels().get(1).getRooms().add(new Room("306", true, Room.CHESSROOM, buildings.get(0).getLevels().get(1), 20, 10));
+		buildings.get(0).getLevels().get(1).getRooms().add(new Room("306", true, Room.CHESSROOM, buildings.get(0).getLevels().get(1), 2, 2));
 		buildings.get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("一号床", buildings.get(0).getLevels().get(0).getRooms().get(0)));
 		buildings.get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("二号床", buildings.get(0).getLevels().get(0).getRooms().get(0)));
 //		checkInInfos.add(new CheckInInfo(buildings.get(0).getLevels().get(0).getRooms().get(0).getBeds().get(0), patients.get(0), LocalDate.now(), LocalDate.now(), true));

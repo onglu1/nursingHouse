@@ -13,10 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import model.Database;
 import model.Patient;
 
 public class AddPatientInterfaceController implements Initializable{
+	//[start]
 	private final int widowWid = 380;
     @FXML
     private RadioButton maleButton;
@@ -71,7 +74,13 @@ public class AddPatientInterfaceController implements Initializable{
     
     @FXML
     private Label idAlert;
-
+    //[end]
+    @FXML
+    void enterPressed(KeyEvent event) {
+    	if(event.getCode() == KeyCode.ENTER) {
+    		confirm();
+    	}
+    }
     @FXML
     void confirm() {
     	boolean isStorable = true;

@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 import building.Bed;
 import building.Building;
 import building.Level;
+import building.RareRoomApplication;
 import building.Room;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -167,7 +169,6 @@ public class MainInterfaceController implements Initializable{
     	stage1.initModality(Modality.APPLICATION_MODAL);
     	addPatient.start(stage1);
     	stage1.setOnHidden(new EventHandler<WindowEvent>() {
-			
 			@Override
 			public void handle(WindowEvent event) {
 				// TODO Auto-generated method stub
@@ -378,6 +379,19 @@ public class MainInterfaceController implements Initializable{
     		Alert alert = new Alert(AlertType.ERROR, "所选床位已经被占用");
     		alert.show();
     		return ;
+    	}
+    	for(Building building : Database.getInstance().getBuildings()) {
+    		for(Level level : building.getLevels()) {
+    			for(Room room : level.getRooms()) {
+    				for(Bed bed : room.getBeds()) if(bed.getOwner() != null){
+    					if(bed.getOwner().equals(checkInPatientChoiceBox.getSelectionModel().getSelectedItem())) {
+    						Alert alert = new Alert(AlertType.ERROR, "该病人已入院，请重新选择。");
+    			    		alert.show();
+    			    		return ;
+    					}
+    				}
+    			}
+    		}
     	}
     	bedManBedChoice.getSelectionModel().getSelectedItem().setOwner(checkInPatientChoiceBox.getSelectionModel().getSelectedItem());
     	Database.getInstance().getCheckInInfos().add(new CheckInInfo(bedManBedChoice.getSelectionModel().getSelectedItem()
@@ -645,7 +659,18 @@ public class MainInterfaceController implements Initializable{
     void refreshcheckInPatientChoiceBox() {
     	ArrayList<Patient> tmp = new ArrayList<Patient>();
     	for(Patient patient : Database.getInstance().getPatients()) {
-    		tmp.add(patient);
+    		boolean f = false;
+    		for(Building building : Database.getInstance().getBuildings()) {
+        		for(Level level : building.getLevels())  {
+        			for(Room room : level.getRooms())  {
+        				for(Bed bed : room.getBeds())  {
+        					if(bed.getOwner() != null)
+        						f |= (bed.getOwner().equals(patient));
+        				}
+        			}
+        		}
+        	}
+    		if(!f) tmp.add(patient);
     	}
     	checkInPatientChoiceBox.getItems().setAll(tmp);
     	//设置展示内容
@@ -691,13 +716,94 @@ public class MainInterfaceController implements Initializable{
     @FXML
     private TableView<Room> rareTableView;
     
+    @FXML
+    private void rareSearchFieldKeyPressed(KeyEvent event) {
+    	if(event.getCode() == KeyCode.ENTER) {
+    		rareRoomSearchButtonFired();
+    	}
+    }
+    @FXML
+    private void rareRoomSearchButtonFired() {
+    	if(rareSearchField.getText().equals("")) {
+    		Patient patient = rareAplicationPatientChoice.getSelectionModel().getSelectedItem();
+    		String s = rareApplicationTimeField.getText();
+    		rareManagementInit();
+    		rareAplicationPatientChoice.getSelectionModel().select(patient);
+    		rareApplicationTimeField.setText(s);
+    		return ;
+    	}
+    	ArrayList<Room> rooms = new ArrayList<Room>();
+    	for(Building buidling : Database.getInstance().getBuildings()) {
+    		for(Level level : buidling.getLevels()) {
+    			for(Room room : level.getRooms()) {
+    				room.refreshApplicationTime();
+    				if( room.isRareRoom() && room.getRareType() == room.getTypeByChinese(rareSearchField.getText()) ) {
+    					rooms.add(room);
+    				}
+    			}
+    		}
+    	}
+    	rareRoomList.setAll(rooms);
+    }
+    @FXML
+    private void rareRoomRefresh() {
+    	rareManagementInit();
+    }
+    @FXML
+    private void rareRoomApplicationButtonFired() {
+    	if(rareTableView.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请选择申请的房间。");
+    		alert.show();
+    		return ;
+    	}
+    	if(rareAplicationPatientChoice.getSelectionModel().getSelectedItem() == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请选择申请人 。");
+    		alert.show();
+    		return ;
+    	}
+    	if(rareApplicationTimeField.getText().equals("")) {
+    		Alert alert = new Alert(AlertType.ERROR, "请输入申请时间（小时）。");
+    		alert.show();
+    		return ;
+    	}
+    	Room room = rareTableView.getSelectionModel().getSelectedItem();
+    	Patient patient = rareAplicationPatientChoice.getSelectionModel().getSelectedItem();
+    	long time = Long.parseLong(rareApplicationTimeField.getText());
+//    	room.getApplicationList().add(e);
+//    	if(room)
+    	room.refreshApplicationTime();
+    	if(room.getApplicationList().size() >= room.getMaxCapacity()) {
+    		long mintime = Long.MAX_VALUE;
+    		long nowtime = new Date().getTime();
+    		for(RareRoomApplication application : room.getApplicationList()) 
+    			mintime = Math.min(mintime, application.getStartTime().getTime() + application.getDurationTime());
+    		String s = "";
+    		if(mintime - nowtime < 60 * 1000) s = String.valueOf((mintime - nowtime) / 1000) + "秒";
+    		else if(mintime - nowtime < 60 * 60 * 1000) s = String.valueOf((mintime - nowtime) / 60 / 1000) + "分" 
+    													+  String.valueOf((mintime - nowtime) / 1000 % 60) + "秒";
+
+    		else if(mintime - nowtime < 60 * 60 * 60 * 1000) s = String.valueOf((mintime - nowtime) / 60 / 60 / 1000) + "小时" 
+    													+ String.valueOf((mintime - nowtime) % (60 * 60 * 1000) / 60 / 1000) + "分" 
+    													+  String.valueOf((mintime - nowtime) % (60 * 1000) / 1000 % 60) + "秒";
+    		Alert alert = new Alert(AlertType.ERROR, "当前房间申请数已满，还需" + s);
+    		alert.show();
+    		return ;
+    	}
+    	room.getApplicationList().add(new RareRoomApplication(new Date(), time, patient, room));
+    	room.refreshApplicationTime();
+    	rareManagementInit();
+    }
     //稀有设备管理界面初始化
     private void rareManagementInit() {
     	//初始化表格
     	//[start]
+    	rareSearchField.setText("");
+    	rareApplicationTimeField.setText("");
+    	rareRoomList.clear();
     	for(Building buidling : Database.getInstance().getBuildings()) {
     		for(Level level : buidling.getLevels()) {
     			for(Room room : level.getRooms()) {
+    				room.refreshApplicationTime();
     				if(room.isRareRoom()) {
     					rareRoomList.add(room);
     				}
@@ -705,6 +811,7 @@ public class MainInterfaceController implements Initializable{
     		}
     	}
     	rareTableView.setItems(rareRoomList);
+    	rareTableView.getColumns().clear();
     	TableColumn<Room, String> roomTypeColumn = new TableColumn<Room, String>("房间种类");
     	TableColumn<Room, String> roomPositionColumn = new TableColumn<Room, String>("位置");
     	TableColumn<Room, String> maxCapacityColumn = new TableColumn<Room, String>("最大容纳人数");
@@ -773,8 +880,7 @@ public class MainInterfaceController implements Initializable{
 					rareApplicationTimeField.setText(oldValue);
 				}
 			}
-		});
-    	
+		});	
     }
 //[end]
     
@@ -1006,6 +1112,9 @@ public class MainInterfaceController implements Initializable{
     	Room father = roomList.getSelectionModel().getSelectedItem();
     	if(Pattern.matches(" *", bedField.getText())) {
     		Alert alert = new Alert(AlertType.ERROR, "请输入床号");
+    		alert.show();
+    	} else if(father.isRareRoom()) {
+    		Alert alert = new Alert(AlertType.ERROR, "稀有房间不能创建床位");
     		alert.show();
     	} else {
     		String name = bedField.getText();

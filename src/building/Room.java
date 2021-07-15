@@ -1,6 +1,7 @@
 package building;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Room {
 	public final static String[] RARETYPES = {"棋牌室", "健身房", "娱乐室" , "浴室"};
@@ -34,11 +35,13 @@ public class Room {
 	private Level father;
 	
 	public Room(Level father) {
+		applicationList = new ArrayList<RareRoomApplication>();
 		beds = new ArrayList<Bed>();
 		this.father = father;
 	}
 
 	public Room(String name, boolean isRareRoom, Level father) {
+		applicationList = new ArrayList<RareRoomApplication>();
 		beds = new ArrayList<Bed>();
 		this.name = name;
 		this.isRareRoom = isRareRoom;
@@ -71,6 +74,7 @@ public class Room {
 	}
 
 	public Room(String name, boolean isRareRoom, int rareType, Level father, int maxCapacity, int resCapacity) {
+		applicationList = new ArrayList<RareRoomApplication>();
 		beds = new ArrayList<Bed>();
 		this.name = name;
 		this.isRareRoom = isRareRoom;
@@ -119,5 +123,16 @@ public class Room {
 		if(hashNum == Room.ENTERTAINMENTROOM) return "娱乐室";
 		if(hashNum == Room.CHESSROOM) return "棋牌室";
 		return "无";
+	}
+	public void refreshApplicationTime() {
+		Date now = new Date();
+		for(int i = 0; i < applicationList.size(); i++) {
+			long applicationTime = applicationList.get(i).getStartTime().getTime();
+			if((new Date(applicationTime + applicationList.get(i).getDurationTime())).before(now)) {
+				applicationList.remove(i);
+				i--;
+			}
+		}
+		resCapacity = maxCapacity - applicationList.size();
 	}
 }
