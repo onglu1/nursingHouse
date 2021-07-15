@@ -249,6 +249,19 @@ public class AddPatientInterfaceController implements Initializable{
 		if(Database.getInstance().idChangable == false) {
     		idField.setText(Database.getInstance().idNumber);
 			idField.setEditable(false);
+			phoneNumberField.setText(Database.getInstance().getTmppatient().getPhoneNumber());
+			nameField.setText(Database.getInstance().getTmppatient().getName());
+			emergencyContactField.setText(Database.getInstance().getTmppatient().getEmergencyContact());
+			emergencyPhoneNumberField.setText(Database.getInstance().getTmppatient().getEmergencyPhoneNumber());
+			ageField.setText(String.valueOf(Database.getInstance().getTmppatient().getAge()));
+			if(Database.getInstance().getTmppatient().getSex()) {
+				maleButton.setSelected(true);
+				femalButton.setSelected(false);
+			} else {
+				femalButton.setSelected(true);
+				maleButton.setSelected(false);
+			}
+			
     	} else {
     		idField.setText("");
     		idField.setEditable(true);

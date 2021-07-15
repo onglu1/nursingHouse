@@ -1,5 +1,6 @@
 package main;
 
+import controller.MainInterfaceController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,6 +26,8 @@ public class Main extends Application{
 		stage.setTitle("管理界面");
 		stage.getIcons().add(new Image("/icon/nursingHouse.png"));
 		stage.show();
+		MainInterfaceController ctr = fx.getController();
+		ctr.initialize();
 	}
 	
 }

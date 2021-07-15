@@ -87,5 +87,13 @@ public class Patient {
 		return name;
 	}
 	
-
+	public void copy(Patient newValue) {
+		name = newValue.getName();
+		age = newValue.getAge();
+		id = newValue.getId();
+		sex = newValue.getSex();
+		phoneNumber = newValue.getPhoneNumber();
+		emergencyContact = newValue.getEmergencyContact();
+		emergencyPhoneNumber = newValue.getEmergencyPhoneNumber();
+	}
 }

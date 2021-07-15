@@ -253,7 +253,206 @@
           </Tab>
           <Tab fx:id="evaluateTab" text="评估管理">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TabPane prefHeight="650.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                           <tabs>
+                              <Tab text="模板管理">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="205.0" layoutY="88.0" prefHeight="523.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0">
+                                             <children>
+                                                <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" text="新增">
+                                                         <HBox.margin>
+                                                            <Insets left="170.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" text="查询">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <TextField prefHeight="30.0" prefWidth="410.0" promptText="键入你要查询的问题内容...">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <TableView prefHeight="341.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <GridPane prefHeight="100.0" prefWidth="525.0">
+                                                         <children>
+                                                            <Label text="选项1：" GridPane.columnIndex="2">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="选项2：" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="选项3：" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <TextField GridPane.columnIndex="3" />
+                                                            <TextField GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                            <TextField GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                            <Label layoutX="212.0" layoutY="16.0" text="问题：">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <TextField layoutX="270.0" layoutY="12.0" GridPane.columnIndex="1" />
+                                                            <Label layoutX="212.0" layoutY="16.0" text="正确答案：" GridPane.rowIndex="1">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <Button mnemonicParsing="false" text="确定" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                                            <Label text="种类：" GridPane.rowIndex="2" />
+                                                            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                         </children>
+                                                         <columnConstraints>
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="82.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="117.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="170.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="68.0" />
+                                                         </columnConstraints>
+                                                         <rowConstraints>
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                         </rowConstraints>
+                                                         <HBox.margin>
+                                                            <Insets left="200.0" />
+                                                         </HBox.margin>
+                                                      </GridPane>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="问题管理">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="205.0" layoutY="88.0" prefHeight="523.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0">
+                                             <children>
+                                                <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" onAction="#problemManAddButtonFired" text="新增">
+                                                         <HBox.margin>
+                                                            <Insets left="170.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button layoutX="180.0" layoutY="16.0" mnemonicParsing="false" onAction="#problemManRemoveButtonFired" text="删除">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" onAction="#problemManSearchButtonFired" text="查询">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <TextField fx:id="problemManSearchField" prefHeight="30.0" prefWidth="410.0" promptText="键入你要查询的问题内容...">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <TableView fx:id="problemTableView" prefHeight="341.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <GridPane prefHeight="100.0" prefWidth="525.0">
+                                                        <columnConstraints>
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="82.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="117.0" />
+                                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="170.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="68.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                         <HBox.margin>
+                                                            <Insets left="200.0" />
+                                                         </HBox.margin>
+                                                         <children>
+                                                            <Label text="选项1：" GridPane.columnIndex="2">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="选项2：" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="选项3：" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <TextField fx:id="problemManChoice0" GridPane.columnIndex="3" />
+                                                            <TextField fx:id="problemManChoice1" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                            <TextField fx:id="problemManChoice2" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                            <Label layoutX="212.0" layoutY="16.0" text="问题：">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <TextField fx:id="problemManDescriptionField" layoutX="270.0" layoutY="12.0" GridPane.columnIndex="1" />
+                                                            <Label layoutX="212.0" layoutY="16.0" text="正确答案：" GridPane.rowIndex="1">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ChoiceBox fx:id="problemManAnsChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <Button mnemonicParsing="false" onAction="#problemManConfirmButtonFired" text="确定" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                                            <Label text="种类：" GridPane.rowIndex="2" />
+                                                            <ChoiceBox fx:id="problemManTypeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                         </children>
+                                                      </GridPane>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </TabPane>
+                     </children></AnchorPane>
             </content>
           </Tab>
             <Tab fx:id="buildingTab" text="楼宇管理">

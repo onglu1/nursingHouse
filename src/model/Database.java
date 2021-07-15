@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import building.Bed;
 import building.Building;
@@ -15,28 +16,53 @@ public class Database{
 	private ArrayList<Patient> patients = new ArrayList<Patient>();
 	private ArrayList<Building> buildings = new ArrayList<Building>();
 	private ArrayList<CheckInInfo> checkInInfos = new ArrayList<CheckInInfo>();
+	private ArrayList<Problem> problems = new ArrayList<Problem>();
 	private Patient tmppatient = null;
 	public boolean idChangable = true;
 	public String idNumber = null;
-	
+	private long problemId = 1;
+	private static Database singleton;
+	static {
+		singleton = new Database();
+		singleton.setProblemId(1);
+		
+//		System.out.println(problemId);
+		singleton.getUsers().add(new UserAccount("user1", "user1"));
+		singleton.getUsers().add(new UserAccount("user2", "user2"));
+		singleton.getAdmins().add(new UserAccount("admin1", "admin1"));
+		singleton.getAdmins().add(new UserAccount("admin2", "admin2"));
+		singleton.getPatients().add(new Patient("张三", 18, "331081201111217299", true, "张三的爹", "15305865401"));
+		singleton.getPatients().add(new Patient("李四", 18, "33108120111121729X", true, "15305865401", "李四的娘", "15305865401"));
+		singleton.getBuildings().add(new Building("一号楼"));
+		singleton.getBuildings().add(new Building("二号楼"));
+		singleton.getBuildings().get(0).getLevels().add(new Level("一楼", singleton.getBuildings().get(0)));
+		singleton.getBuildings().get(0).getLevels().get(0).getRooms().add(new Room("304", true, Room.BATHROOM, singleton.getBuildings().get(0).getLevels().get(0), 3, 3));
+		singleton.getBuildings().get(0).getLevels().add(new Level("二楼", singleton.getBuildings().get(0)));
+		singleton.getBuildings().get(0).getLevels().get(1).getRooms().add(new Room("306", true, Room.CHESSROOM, singleton.getBuildings().get(0).getLevels().get(1), 2, 2));
+		singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("一号床", singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0)));
+		singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("二号床", singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0)));
+		singleton.getProblems().add(new Problem("你是谁", 0, new ArrayList<String>(Arrays.asList("你", "我", "他")), Problem.TYPES[0]));
+	}
 	private Database() {
-		users.add(new UserAccount("user1", "user1"));
-		users.add(new UserAccount("user2", "user2"));
-		admins.add(new UserAccount("admin1", "admin1"));
-		admins.add(new UserAccount("admin2", "admin2"));
-		patients.add(new Patient("张三", 18, "331081201111217299", true, "张三的爹", "15305865401"));
-		patients.add(new Patient("李四", 18, "33108120111121729X", true, "15305865401", "李四的娘", "15305865401"));
-		buildings.add(new Building("一号楼"));
-		buildings.add(new Building("二号楼"));
-		buildings.get(0).getLevels().add(new Level("一楼", buildings.get(0)));
-		buildings.get(0).getLevels().get(0).getRooms().add(new Room("304", true, Room.BATHROOM, buildings.get(0).getLevels().get(0), 3, 3));
-		buildings.get(0).getLevels().add(new Level("二楼", buildings.get(0)));
-		buildings.get(0).getLevels().get(1).getRooms().add(new Room("306", true, Room.CHESSROOM, buildings.get(0).getLevels().get(1), 2, 2));
-		buildings.get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("一号床", buildings.get(0).getLevels().get(0).getRooms().get(0)));
-		buildings.get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("二号床", buildings.get(0).getLevels().get(0).getRooms().get(0)));
-//		checkInInfos.add(new CheckInInfo(buildings.get(0).getLevels().get(0).getRooms().get(0).getBeds().get(0), patients.get(0), LocalDate.now(), LocalDate.now(), true));
+		
 	}
 	
+	public long getProblemId() {
+		return this.problemId;
+	}
+
+	public void setProblemId(long problemId) {
+		this.problemId = problemId;
+	}
+
+	public ArrayList<Problem> getProblems() {
+		return problems;
+	}
+
+	public void setProblems(ArrayList<Problem> problems) {
+		this.problems = problems;
+	}
+
 	public ArrayList<CheckInInfo> getCheckInInfos() {
 		return checkInInfos;
 	}
@@ -84,10 +110,11 @@ public class Database{
 	public ArrayList<UserAccount> getAdmins() {
 		return admins;
 	}
-	private static Database singleton;
 	public static Database getInstance() {
 		if(singleton == null) {
+			System.out.println(singleton);
 			singleton = new Database();
+			System.out.println(singleton);
 		}
 		return singleton;
 	}

@@ -1,5 +1,6 @@
 package controller;
 
+import java.net.FileNameMap;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -57,8 +58,9 @@ import main.AddPatient;
 import model.CheckInInfo;
 import model.Database;
 import model.Patient;
+import model.Problem;
 
-public class MainInterfaceController implements Initializable{
+public class MainInterfaceController{
 //------------------------------------------------------病患管理--------------------------------------------------------------------
 //[start]
 	//[start]
@@ -195,6 +197,7 @@ public class MainInterfaceController implements Initializable{
     	stage1.initModality(Modality.APPLICATION_MODAL);
     	Database.getInstance().idChangable = false;
     	Database.getInstance().idNumber = oldPatient.getId();
+    	Database.getInstance().setTmppatient(oldPatient);
     	addPatient.start(stage1);
     	
     	stage1.setOnHidden(new EventHandler<WindowEvent>() {
@@ -202,8 +205,7 @@ public class MainInterfaceController implements Initializable{
 			public void handle(WindowEvent event) {
 				// TODO Auto-generated method stub
 				if(Database.getInstance().getTmppatient() != null) {
-					Database.getInstance().getPatients().remove(oldPatient);
-					Database.getInstance().getPatients().add(Database.getInstance().getTmppatient());
+					oldPatient.copy(Database.getInstance().getTmppatient());
 				}
 				Database.getInstance().idNumber = null;
 				Database.getInstance().setTmppatient(null);
@@ -884,8 +886,192 @@ public class MainInterfaceController implements Initializable{
     }
 //[end]
     
-//------------------------------------------------------评估管理--------------------------------------------------------------------
+//------------------------------------------------------模板管理--------------------------------------------------------------------
+    
+    void templateManagementInit() {
+    	
+    }
+//------------------------------------------------------问题管理--------------------------------------------------------------------
+//[start]
+    private ObservableList<Problem> problemManProblemList = FXCollections.observableArrayList();
+    @FXML
+    private TableView<Problem> problemTableView;
+    @FXML
+    private TextField problemManSearchField;
+    @FXML
+    private TextField problemManDescriptionField;
+    @FXML
+    private TextField problemManChoice0;
+    @FXML
+    private TextField problemManChoice1;
+    @FXML
+    private TextField problemManChoice2;
+    @FXML
+    private ChoiceBox<Integer> problemManAnsChoiceBox;
+    @FXML
+    private ChoiceBox<String> problemManTypeChoiceBox;
+    //删除键按下
+    @FXML
+    private void problemManRemoveButtonFired() {
+    	if(problemTableView.getSelectionModel().getSelectedItem() == null) return ;
+    	Problem problem = problemTableView.getSelectionModel().getSelectedItem();
+    	Database.getInstance().getProblems().remove(problem);
+    	problemManagementInit();
+    }
+    //搜索键按下
+    @FXML
+    private void problemManSearchButtonFired() {
+    	String text = problemManSearchField.getText();
+    	if(Pattern.matches(" *", text)) {
+    		problemManagementInit();
+    		return ;
+    	}
+    	problemManProblemList.clear();
+    	for(Problem problem : Database.getInstance().getProblems()) {
+    		if(problem.getDescription().contains(text)) {
+    			problemManProblemList.add(problem);
+    		}
+    	}
+    }
+    //新增键按下
+    @FXML
+    private void problemManAddButtonFired() {
+    	Database.getInstance().getProblems().add(new Problem());
+    	problemManagementInit();
+    }
+    //确认键按下
+    @FXML
+    private void problemManConfirmButtonFired() {
+    	Problem problem = problemTableView.getSelectionModel().getSelectedItem();
+    	problem.setAns(problemManAnsChoiceBox.getSelectionModel().getSelectedItem());
+    	problem.setType(problemManTypeChoiceBox.getSelectionModel().getSelectedItem());
+    	problem.setDescription(problemManDescriptionField.getText());
+    	problem.getChoice().set(0, problemManChoice0.getText());
+    	problem.getChoice().set(1, problemManChoice1.getText());
+    	problem.getChoice().set(2, problemManChoice2.getText());
+    	problemManagementInit();
+    	
+    }
+    
+    //初始化问题管理界面
+    private void problemManagementInit() {
+    	//清空重置
+    	problemTableView.getColumns().clear();
+    	problemManProblemList.clear();
 
+		problemManAnsChoiceBox.getItems().clear();
+		problemManTypeChoiceBox.getItems().clear();
+    	problemManDescriptionField.setText("");
+    	problemManChoice0.setText("");
+    	problemManChoice1.setText("");
+    	problemManChoice2.setText("");
+    	problemManSearchField.setText("");
+
+    	problemTableView.setItems(problemManProblemList);
+    	problemManProblemList.setAll(Database.getInstance().getProblems());
+    	TableColumn<Problem, Long> problemManIdColumn = new TableColumn<Problem, Long>("ID");
+    	TableColumn<Problem, String> problemManDescriptionColumn = new TableColumn<Problem, String>("题目描述");
+    	TableColumn<Problem, String> problemManTypeColumn = new TableColumn<Problem, String>("种类");
+    	TableColumn<Problem, String> problemManChoice0Column = new TableColumn<Problem, String>("选项1");
+    	TableColumn<Problem, String> problemManChoice1Column = new TableColumn<Problem, String>("选项2");
+    	TableColumn<Problem, String> problemManChoice2Column = new TableColumn<Problem, String>("选项3");
+    	problemManIdColumn.setCellValueFactory(new PropertyValueFactory<Problem, Long>("id"));
+    	problemManDescriptionColumn.setCellValueFactory(new PropertyValueFactory<Problem, String>("description"));
+    	problemManTypeColumn.setCellValueFactory(new PropertyValueFactory<Problem, String>("type"));
+    	problemManChoice0Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Problem, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getChoice().get(0));
+				return str;
+			}
+		});
+    	problemManChoice1Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Problem, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getChoice().get(1));
+				return str;
+			}
+		});
+    	problemManChoice2Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Problem, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getChoice().get(2));
+				return str;
+			}
+		});
+    	
+    	problemTableView.getColumns().add(problemManIdColumn);
+    	problemTableView.getColumns().add(problemManDescriptionColumn);
+    	problemTableView.getColumns().add(problemManChoice0Column);
+    	problemTableView.getColumns().add(problemManChoice1Column);
+    	problemTableView.getColumns().add(problemManChoice2Column);
+    	problemTableView.getColumns().add(problemManTypeColumn);
+    	for(TableColumn<Problem, ?> c : problemTableView.getColumns()) {
+    		c.setResizable(false);
+    	}
+    	problemManIdColumn.setPrefWidth(problemTableView.getWidth() * 0.1);
+    	problemManDescriptionColumn.setPrefWidth(problemTableView.getWidth() * 0.2);
+    	problemManChoice0Column.setPrefWidth(problemTableView.getWidth() * 0.2);
+    	problemManChoice1Column.setPrefWidth(problemTableView.getWidth() * 0.2);
+    	problemManChoice2Column.setPrefWidth(problemTableView.getWidth() * 0.2);
+    	problemManTypeColumn.setPrefWidth(problemTableView.getWidth() * 0.1);
+    	
+    	
+
+    	problemManAnsChoiceBox.converterProperty().set(new StringConverter<Integer>() {
+
+			@Override
+			public Integer fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String toString(Integer object) {
+				// TODO Auto-generated method stub
+				return String.valueOf(object + 1);
+			}
+    		
+		});
+    	problemTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Problem>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Problem> observable, Problem oldValue, Problem newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) {
+					problemManAnsChoiceBox.getItems().clear();
+					problemManTypeChoiceBox.getItems().clear();
+			    	problemManDescriptionField.setText("");
+			    	problemManChoice0.setText("");
+			    	problemManChoice1.setText("");
+			    	problemManChoice2.setText("");
+				} else {
+					problemManAnsChoiceBox.getItems().setAll(0, 1, 2);
+					problemManAnsChoiceBox.getSelectionModel().select(newValue.getAns());
+					problemManTypeChoiceBox.getItems().setAll(Problem.TYPES);
+					problemManTypeChoiceBox.getSelectionModel().select(newValue.getType());
+			    	problemManDescriptionField.setText(newValue.getDescription());
+			    	problemManChoice0.setText(newValue.getChoice().get(0));
+			    	problemManChoice1.setText(newValue.getChoice().get(1));
+			    	problemManChoice2.setText(newValue.getChoice().get(2));
+			    	
+				}
+				
+			}
+		});
+    }
+    
+//[end]
+    
 //------------------------------------------------------楼宇管理--------------------------------------------------------------------
 //[start]
     //[start]
@@ -1342,11 +1528,13 @@ public class MainInterfaceController implements Initializable{
     }
     
 //[end]
-    @Override
-	public void initialize(URL location, ResourceBundle resources) {
+
+    public void initialize() {
 		patientManagementInit();
 		bedManagementInit();
 		rareManagementInit();
+		templateManagementInit();
+		problemManagementInit();
 		buildingManagementInit();
 	}
 
