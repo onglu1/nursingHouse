@@ -1,11 +1,12 @@
 package model;
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import building.Bed;
 
-public class CheckInInfo {
+public class CheckInInfo implements Serializable{
 	private Bed bed;
 	private Patient patient;
 	private LocalDate checkInTime;

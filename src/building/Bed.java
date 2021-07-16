@@ -1,8 +1,10 @@
 package building;
 
+import java.io.Serializable;
+
 import model.Patient;
 
-public class Bed {
+public class Bed implements Serializable{
 	private String name;
 	private Patient owner;
 	private Room father;

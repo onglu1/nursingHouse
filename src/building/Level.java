@@ -1,8 +1,9 @@
 package building;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Level {
+public class Level implements Serializable {
 	private String name;
 	private ArrayList<Room> rooms;
 	private Building father;

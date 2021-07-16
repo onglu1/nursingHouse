@@ -24,7 +24,7 @@ public class AddPatient extends Application{
 		stage.setScene(scene);
 		stage.setResizable(false);
 		stage.setTitle("添加新病患");
-		stage.getIcons().add(new Image("/icon/nursingHouse.png"));
+		stage.getIcons().add(new Image("/icon/add-user.png"));
 		stage.show();
 	}
 	

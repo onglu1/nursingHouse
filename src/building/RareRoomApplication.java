@@ -1,11 +1,12 @@
 package building;
 
+import java.io.Serializable;
 import java.util.Date;
 //import java.util.regex.Patient;
 
 import model.Patient;
 
-public class RareRoomApplication {
+public class RareRoomApplication implements Serializable {
 	private long timescale = 1000 * 60 * 60;
 	private Date startTime;
 	private long durationTime;

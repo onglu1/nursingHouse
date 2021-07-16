@@ -43,9 +43,14 @@
                                                          <HBox.margin>
                                                             <Insets left="5.0" />
                                                          </HBox.margin></Button>
+                                                      <Button mnemonicParsing="false" onAction="#patientEvaluateButtonFIred" text="评估">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Button>
                                                       <Button mnemonicParsing="false" onAction="#query" text="查询">
                                                          <HBox.margin>
-                                                            <Insets left="80.0" />
+                                                            <Insets left="30.0" />
                                                          </HBox.margin>
                                                       </Button>
                                                       <ChoiceBox fx:id="searchChoice" prefHeight="23.0" prefWidth="131.0">
@@ -63,7 +68,20 @@
                                                       <Insets bottom="15.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <TableView fx:id="patientTableView" prefHeight="560.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
+                                                <TableView fx:id="patientTableView" prefHeight="422.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
+                                                <HBox alignment="CENTER" prefHeight="58.0" prefWidth="900.0">
+                                                   <children>
+                                                      <Label text="选择模板：">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <ChoiceBox fx:id="patientManTemplateChoiceBox" prefWidth="150.0" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                        </children>
@@ -257,7 +275,7 @@
                      <children>
                         <TabPane prefHeight="650.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                            <tabs>
-                              <Tab text="模板管理">
+                              <Tab onSelectionChanged="#templateManagementInit" text="模板管理">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -274,25 +292,25 @@
                                                          <children>
                                                             <HBox prefHeight="30.0" prefWidth="431.0">
                                                                <children>
-                                                                  <Button mnemonicParsing="false" text="新增" />
-                                                                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="删除">
+                                                                  <Button mnemonicParsing="false" onAction="#templateManAddTemplateButtonFired" text="新增" />
+                                                                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#templateManRemoveTemplateButtonFired" text="删除">
                                                                      <HBox.margin>
                                                                         <Insets left="5.0" />
                                                                      </HBox.margin>
                                                                   </Button>
-                                                                  <Button mnemonicParsing="false" text="查询">
+                                                                  <Button mnemonicParsing="false" onAction="#templateManSearchTemplateButtonFired" text="查询">
                                                                      <HBox.margin>
                                                                         <Insets left="5.0" />
                                                                      </HBox.margin>
                                                                   </Button>
-                                                                  <TextField prefHeight="30.0" prefWidth="265.0" promptText="键入你要查询的问题内容...">
+                                                                  <TextField fx:id="templateManTemplateSearchField" prefHeight="30.0" prefWidth="265.0" promptText="键入你要查询的问题内容...">
                                                                      <HBox.margin>
                                                                         <Insets left="5.0" />
                                                                      </HBox.margin>
                                                                   </TextField>
                                                                </children>
                                                             </HBox>
-                                                            <TableView prefHeight="340.0" prefWidth="355.0" stylesheets="@../css/Main.css">
+                                                            <TableView fx:id="templateManTemplateTableView" prefHeight="340.0" prefWidth="355.0" stylesheets="@../css/Main.css">
                                                                <VBox.margin>
                                                                   <Insets />
                                                                </VBox.margin>
@@ -304,27 +322,17 @@
                                                       </VBox>
                                                       <VBox layoutX="10.0" layoutY="10.0" prefHeight="340.0" prefWidth="431.0">
                                                          <children>
-                                                            <HBox prefHeight="30.0" prefWidth="431.0">
+                                                            <HBox>
                                                                <children>
-                                                                  <Button mnemonicParsing="false" text="新增" />
-                                                                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="删除">
+                                                                  <Button mnemonicParsing="false" onAction="#templateManAddProblemButtonFired" text="新增" />
+                                                                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#templateManRemoveProblemButtonFired" text="删除">
                                                                      <HBox.margin>
                                                                         <Insets left="5.0" />
                                                                      </HBox.margin>
                                                                   </Button>
-                                                                  <Button mnemonicParsing="false" text="查询">
-                                                                     <HBox.margin>
-                                                                        <Insets left="5.0" />
-                                                                     </HBox.margin>
-                                                                  </Button>
-                                                                  <TextField prefHeight="30.0" prefWidth="265.0" promptText="键入你要查询的问题内容...">
-                                                                     <HBox.margin>
-                                                                        <Insets left="5.0" />
-                                                                     </HBox.margin>
-                                                                  </TextField>
                                                                </children>
                                                             </HBox>
-                                                            <TableView prefHeight="310.0" prefWidth="454.0" stylesheets="@../css/Main.css">
+                                                            <TableView fx:id="templateManProblemTableView" prefHeight="310.0" prefWidth="300.0" stylesheets="@../css/Main.css">
                                                                <VBox.margin>
                                                                   <Insets />
                                                                </VBox.margin>
@@ -336,52 +344,60 @@
                                                       </VBox>
                                                    </children>
                                                 </HBox>
-                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                <HBox prefHeight="112.0" prefWidth="900.0">
                                                    <children>
-                                                      <GridPane prefHeight="100.0" prefWidth="525.0">
+                                                      <GridPane prefHeight="112.0" prefWidth="501.0">
                                                          <children>
-                                                            <Label text="选项1：" GridPane.columnIndex="2">
+                                                            <Label text="选项1：" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
                                                             </Label>
-                                                            <Label text="选项2：" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                            <Label text="选项2：" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
                                                             </Label>
-                                                            <Label text="选项3：" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                            <Label text="选项3：" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
                                                             </Label>
-                                                            <TextField GridPane.columnIndex="3" />
-                                                            <TextField GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                                            <TextField GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                                            <Label layoutX="212.0" layoutY="16.0" text="问题：">
+                                                            <Label layoutX="212.0" layoutY="16.0" text="问题：" GridPane.rowIndex="1">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
                                                             </Label>
-                                                            <TextField layoutX="270.0" layoutY="12.0" GridPane.columnIndex="1" />
-                                                            <Label layoutX="212.0" layoutY="16.0" text="正确答案：" GridPane.rowIndex="1">
+                                                            <Label layoutX="212.0" layoutY="16.0" text="正确答案：" GridPane.rowIndex="2">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
                                                             </Label>
-                                                            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                            <Button mnemonicParsing="false" text="确定" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                                                            <Label text="种类：" GridPane.rowIndex="2" />
-                                                            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            <Label text="种类：" GridPane.rowIndex="3">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font></Label>
+                                                            <Label fx:id="templateManProblemLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <Label fx:id="templateManAnsLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            <Label fx:id="templateManTypeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                            <Label fx:id="templateManChoice0Lable" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                            <Label fx:id="templateManChoice1Label" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                            <Label fx:id="templateManChoice2Label" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                                            <Label text="请选择问题：">
+                                                               <font>
+                                                                  <Font size="16.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ChoiceBox fx:id="templateManProblemChoiceBox" prefHeight="23.0" prefWidth="152.0" GridPane.columnIndex="1" />
                                                          </children>
                                                          <columnConstraints>
-                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="82.0" />
-                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="117.0" />
-                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
-                                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="170.0" />
-                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="68.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="123.0" />
+                                                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="167.0" />
+                                                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="70.0" />
+                                                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="139.0" />
                                                          </columnConstraints>
                                                          <rowConstraints>
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

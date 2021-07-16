@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import model.Problem;
 
 public class Animations {
 	public static Node getFlowerView(Image image, int number, int w, int h, int z) {

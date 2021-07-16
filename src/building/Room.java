@@ -1,9 +1,10 @@
 package building;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Room {
+public class Room implements Serializable {
 	public final static String[] RARETYPES = {"棋牌室", "健身房", "娱乐室" , "浴室"};
 	public final static int GYM = "gym".hashCode();
 	public final static int BATHROOM = "bathroom".hashCode();

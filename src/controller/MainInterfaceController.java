@@ -25,6 +25,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -37,9 +38,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -55,61 +58,16 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import main.AddPatient;
+import main.Evaluate;
 import model.CheckInInfo;
 import model.Database;
 import model.Patient;
 import model.Problem;
+import model.Template;
 
 public class MainInterfaceController{
-//------------------------------------------------------病患管理--------------------------------------------------------------------
+//------------------------------------------------------界面管理--------------------------------------------------------------------
 //[start]
-	//[start]
-	private ObservableList<Patient> patientList = FXCollections.observableArrayList();
-    private Rectangle choiceRec;
-    @FXML
-    private AnchorPane menuButtonAnchorPane;
-    
-    @FXML
-    private Circle menuShadow;
-
-    @FXML
-    private VBox menuVBox;
-    
-    @FXML
-    private Tab evaluateTab;
-
-    @FXML
-    private Tab buildingTab;
-
-    @FXML
-    private Tab userTab;
-    
-    @FXML
-    private TabPane interfaceTabPane;
-    
-    @FXML
-    private Rectangle evaluateRec;
-    
-    @FXML
-    private Rectangle userRec;
-    
-    @FXML
-    private Rectangle buildingRec;
-
-    @FXML
-    private Rectangle screenCover;
-    
-    @FXML
-    private TabPane choinePane;
-    @FXML
-    private ChoiceBox<String> searchChoice;
-    @FXML
-    private TableView<Patient> patientTableView;
-    
-    @FXML
-    private TextField searchField;
-    //[end]
-    
     //显示菜单
     @FXML
     void sidebarShow() {
@@ -162,7 +120,90 @@ public class MainInterfaceController{
     	}
     	
     }
+//[end]
+//------------------------------------------------------病患管理--------------------------------------------------------------------
+//[start]
+	//[start]
+	private ObservableList<Patient> patientList = FXCollections.observableArrayList();
+    private Rectangle choiceRec;
+    @FXML
+    private ChoiceBox<Template> patientManTemplateChoiceBox;
+    @FXML
+    private AnchorPane menuButtonAnchorPane;
     
+    @FXML
+    private Circle menuShadow;
+
+    @FXML
+    private VBox menuVBox;
+    
+    @FXML
+    private Tab evaluateTab;
+
+    @FXML
+    private Tab buildingTab;
+
+    @FXML
+    private Tab userTab;
+    
+    @FXML
+    private TabPane interfaceTabPane;
+    
+    @FXML
+    private Rectangle evaluateRec;
+    
+    @FXML
+    private Rectangle userRec;
+    
+    @FXML
+    private Rectangle buildingRec;
+
+    @FXML
+    private Rectangle screenCover;
+    
+    @FXML
+    private TabPane choinePane;
+    @FXML
+    private ChoiceBox<String> searchChoice;
+    @FXML
+    private TableView<Patient> patientTableView;
+    
+    @FXML
+    private TextField searchField;
+    //[end]
+    //评估病患
+    @FXML
+    private void patientEvaluateButtonFIred() throws Exception {
+    	Patient patient = patientTableView.getSelectionModel().getSelectedItem();
+    	Template template = patientManTemplateChoiceBox.getSelectionModel().getSelectedItem();
+    	if(template == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请选择模板。");
+    		alert.show();
+    		return ;
+    	}
+    	if(patient == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请在表格中选择病人。");
+    		alert.show();
+    		return ;
+    	}
+    	Evaluate main = new Evaluate();
+    	AnchorPane ap = new AnchorPane();
+    	Scene sc = new Scene(ap);
+    	Stage stage = new Stage();
+    	stage.setScene(sc);
+    	Database.getInstance().setTmppatient(patient);
+    	Database.getInstance().setTmptemplate(template);
+    	stage.initModality(Modality.WINDOW_MODAL.APPLICATION_MODAL);
+    	main.start(stage);
+    	stage.setOnHidden(new EventHandler<WindowEvent>() {
+			
+			@Override
+			public void handle(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				patientManagementInit();
+			}
+		});
+    }
     //新增病患
     @FXML
     void addPatient() throws Exception {
@@ -264,7 +305,27 @@ public class MainInterfaceController{
 	
     //初始化病患管理界面
     void patientManagementInit() {
+    	patientList.clear();
+    	patientTableView.getColumns().clear();
     	patientList.setAll(Database.getInstance().getPatients());
+    	ObservableList<Template> tmplist = FXCollections.observableArrayList();
+    	tmplist.setAll(Database.getInstance().getTemplates());
+    	patientManTemplateChoiceBox.setItems(tmplist);
+    	patientManTemplateChoiceBox.getSelectionModel().clearSelection();
+    	patientManTemplateChoiceBox.setConverter(new StringConverter<Template>() {
+			
+			@Override
+			public String toString(Template arg0) {
+				// TODO Auto-generated method stub
+				return arg0.getName();
+			}
+			
+			@Override
+			public Template fromString(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
 		patientTableView.setItems(patientList);
 		TableColumn<Patient, String> nameColumn = new TableColumn<Patient, String>("姓名");
 		TableColumn<Patient, Integer> ageColumn = new TableColumn<Patient, Integer>("年龄");
@@ -273,6 +334,7 @@ public class MainInterfaceController{
 		TableColumn<Patient, String> phoneNumberColumn = new TableColumn<Patient, String>("联系电话");
 		TableColumn<Patient, String> emergencyContactColumn = new TableColumn<Patient, String>("紧急联系人");
 		TableColumn<Patient, String> emergencyPhoneNumberColumn = new TableColumn<Patient, String>("紧急联系电话");
+		TableColumn<Patient, Double> scoreColumn = new TableColumn<Patient, Double>("评估分数");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
 		idColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("id"));
 		ageColumn.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("age"));
@@ -285,23 +347,18 @@ public class MainInterfaceController{
 				return str;
 			}
 		});
+		scoreColumn.setCellValueFactory(new PropertyValueFactory<Patient, Double>("score"));
 		phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("phoneNumber"));
 		emergencyContactColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("emergencyContact"));
 		emergencyPhoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("emergencyPhoneNumber"));
-		nameColumn.setPrefWidth(100.0);
-		nameColumn.setResizable(false);
-		idColumn.setPrefWidth(198.0);
-		idColumn.setResizable(false);
-		ageColumn.setPrefWidth(50);
-		ageColumn.setResizable(false);
-		sexColumn.setPrefWidth(50);
-		sexColumn.setResizable(false);
-		phoneNumberColumn.setPrefWidth(200);
-		phoneNumberColumn.setResizable(false);
-		emergencyContactColumn.setPrefWidth(100);
-		emergencyContactColumn.setResizable(false);
-		emergencyPhoneNumberColumn.setPrefWidth(200);
-		emergencyPhoneNumberColumn.setResizable(false);
+		nameColumn.setPrefWidth(patientTableView.getWidth() * 0.1);
+		idColumn.setPrefWidth(patientTableView.getWidth() * 0.21);
+		ageColumn.setPrefWidth(patientTableView.getWidth() * 0.07);
+		sexColumn.setPrefWidth(patientTableView.getWidth() * 0.07);
+		phoneNumberColumn.setPrefWidth(patientTableView.getWidth() * 0.13);
+		emergencyContactColumn.setPrefWidth(patientTableView.getWidth() * 0.1);
+		emergencyPhoneNumberColumn.setPrefWidth(patientTableView.getWidth() * 0.13);
+		scoreColumn.setPrefWidth(patientTableView.getWidth() * 0.14);
 		
 		patientTableView.getColumns().add(nameColumn);
 		patientTableView.getColumns().add(ageColumn);
@@ -310,6 +367,7 @@ public class MainInterfaceController{
 		patientTableView.getColumns().add(phoneNumberColumn);
 		patientTableView.getColumns().add(emergencyContactColumn);
 		patientTableView.getColumns().add(emergencyPhoneNumberColumn);
+		patientTableView.getColumns().add(scoreColumn);
 		
 		searchChoice.getItems().add("姓名");
 		searchChoice.getItems().add("年龄");
@@ -885,12 +943,242 @@ public class MainInterfaceController{
 		});	
     }
 //[end]
-    
 //------------------------------------------------------模板管理--------------------------------------------------------------------
+//[start]
+    //[start]
+    ObservableList<Template> templateManTemplateList = FXCollections.observableArrayList();
+    ObservableList<Problem> templateManProblemList = FXCollections.observableArrayList();
     
+    @FXML
+    private TextField templateManTemplateSearchField;
+    @FXML
+    private TableView<Template> templateManTemplateTableView;
+    @FXML
+    private TableView<Problem> templateManProblemTableView;
+    @FXML
+    private ChoiceBox<Problem> templateManProblemChoiceBox;
+    @FXML
+    private Label templateManProblemLabel;
+    @FXML
+    private Label templateManAnsLabel;
+    @FXML
+    private Label templateManTypeLabel;
+    @FXML
+    private Label templateManChoice0Lable;
+    @FXML
+    private Label templateManChoice1Label;
+    @FXML
+    private Label templateManChoice2Label;
+    //[end]
+    //删除问题
+    @FXML
+    private void templateManRemoveProblemButtonFired() {
+    	Template template = templateManTemplateTableView.getSelectionModel().getSelectedItem();
+    	if(template == null) return ;
+    	Problem problem = templateManProblemTableView.getSelectionModel().getSelectedItem();
+    	if(problem == null) return ;
+    	template.getProblems().remove(problem);
+    	templateManagementInit();
+    	templateManTemplateTableView.getSelectionModel().select(template);
+    }
+    //添加问题
+    @FXML
+    private void templateManAddProblemButtonFired() {
+    	Template template = templateManTemplateTableView.getSelectionModel().getSelectedItem();
+    	if(template == null) return ;
+    	Problem problem = templateManProblemChoiceBox.getSelectionModel().getSelectedItem();
+    	if(problem == null) return ;
+    	template.getProblems().add(problem);
+    	templateManagementInit();
+    	templateManTemplateTableView.getSelectionModel().select(template);
+    }
+    //搜索模板
+    @FXML
+    private void templateManSearchTemplateButtonFired() {
+    	String name = templateManTemplateSearchField.getText();
+    	if(name.equals("")) {
+    		templateManagementInit();
+    		return ;
+    	}
+    	templateManTemplateList.clear();
+    	for(Template template : Database.getInstance().getTemplates()) {
+    		if(template.getName().contains(name)) {
+    			templateManTemplateList.add(template);
+    		}
+    	}
+    }
+    //删除模板
+    @FXML
+    private void templateManRemoveTemplateButtonFired() {
+    	Template template = templateManTemplateTableView.getSelectionModel().getSelectedItem();
+    	if(template == null) return ;
+    	Database.getInstance().getTemplates().remove(template);
+    	templateManagementInit();
+    }
+    //添加模板
+    @FXML
+    private void templateManAddTemplateButtonFired() {
+    	Database.getInstance().getTemplates().add(new Template());
+    	templateManagementInit();
+    }
+    @FXML
     void templateManagementInit() {
+    	templateManTemplateList.clear();
+    	templateManProblemList.clear();
+    	templateManTemplateTableView.getColumns().clear();
+    	templateManProblemTableView.getColumns().clear();
+    	templateManTemplateSearchField.setText("");
+		templateManProblemLabel.setText("");
+		templateManAnsLabel.setText("");
+		templateManTypeLabel.setText("");
+		templateManChoice0Lable.setText("");
+		templateManChoice1Label.setText("");
+		templateManChoice2Label.setText("");
+    	templateManProblemChoiceBox.getSelectionModel().clearSelection();
+    	templateManTemplateTableView.setEditable(true);
+    	
+    	//设置模板表格的显示
+    	templateManTemplateList.setAll(Database.getInstance().getTemplates());
+    	templateManTemplateTableView.setItems(templateManTemplateList);
+    	TableColumn<Template, Integer> templateManTemplateIdColumn = new TableColumn<Template, Integer>("ID");
+    	TableColumn<Template, String> templateManTemplateNameColumn = new TableColumn<Template, String>("名字");
+    	TableColumn<Template, String> templateManTemplateTypeColumn = new TableColumn<Template, String>("种类");
+    	templateManTemplateTableView.getColumns().add(templateManTemplateIdColumn);
+    	templateManTemplateTableView.getColumns().add(templateManTemplateNameColumn);
+    	templateManTemplateTableView.getColumns().add(templateManTemplateTypeColumn);
+    	templateManTemplateIdColumn.setCellValueFactory(new PropertyValueFactory<Template, Integer>("id"));
+    	templateManTemplateNameColumn.setCellValueFactory(new PropertyValueFactory<Template, String>("name"));
+    	templateManTemplateTypeColumn.setCellValueFactory(new PropertyValueFactory<Template, String>("type"));
+    	templateManTemplateNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    	templateManTemplateIdColumn.setPrefWidth(templateManTemplateTableView.getWidth() * 0.1);
+    	templateManTemplateNameColumn.setPrefWidth(templateManTemplateTableView.getWidth() * 0.795);
+    	templateManTemplateTypeColumn.setPrefWidth(templateManTemplateTableView.getWidth() * 0.1);
+    	templateManTemplateNameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Template,String>>() {
+			
+			@Override
+			public void handle(CellEditEvent<Template, String> event) {
+				// TODO Auto-generated method stub
+				Template template = event.getRowValue();
+				template.setName(event.getNewValue());
+			}
+		});
+    	
+    	//设置问题表格的显示
+    	templateManProblemTableView.setItems(templateManProblemList);
+    	TableColumn<Problem, Long> problemManIdColumn = new TableColumn<Problem, Long>("ID");
+    	TableColumn<Problem, String> problemManDescriptionColumn = new TableColumn<Problem, String>("题目描述");
+    	TableColumn<Problem, String> problemManTypeColumn = new TableColumn<Problem, String>("种类");
+    	TableColumn<Problem, String> problemManChoice0Column = new TableColumn<Problem, String>("选项1");
+    	TableColumn<Problem, String> problemManChoice1Column = new TableColumn<Problem, String>("选项2");
+    	TableColumn<Problem, String> problemManChoice2Column = new TableColumn<Problem, String>("选项3");
+    	problemManIdColumn.setCellValueFactory(new PropertyValueFactory<Problem, Long>("id"));
+    	problemManDescriptionColumn.setCellValueFactory(new PropertyValueFactory<Problem, String>("description"));
+    	problemManTypeColumn.setCellValueFactory(new PropertyValueFactory<Problem, String>("type"));
+    	problemManChoice0Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Problem, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getChoice().get(0));
+				return str;
+			}
+		});
+    	problemManChoice1Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Problem, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getChoice().get(1));
+				return str;
+			}
+		});
+    	problemManChoice2Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
+
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Problem, String> param) {
+				// TODO Auto-generated method stub
+				SimpleStringProperty str = new SimpleStringProperty();
+				str.setValue(param.getValue().getChoice().get(2));
+				return str;
+			}
+		});
+    	
+    	templateManProblemTableView.getColumns().add(problemManIdColumn);
+    	templateManProblemTableView.getColumns().add(problemManDescriptionColumn);
+    	templateManProblemTableView.getColumns().add(problemManChoice0Column);
+    	templateManProblemTableView.getColumns().add(problemManChoice1Column);
+    	templateManProblemTableView.getColumns().add(problemManChoice2Column);
+    	templateManProblemTableView.getColumns().add(problemManTypeColumn);
+    	for(TableColumn<Problem, ?> c : templateManProblemTableView.getColumns()) {
+    		c.setResizable(false);
+    	}
+    	problemManIdColumn.setPrefWidth(templateManProblemTableView.getWidth() * 0.1);
+    	problemManDescriptionColumn.setPrefWidth(templateManProblemTableView.getWidth() * 0.2);
+    	problemManChoice0Column.setPrefWidth(templateManProblemTableView.getWidth() * 0.195);
+    	problemManChoice1Column.setPrefWidth(templateManProblemTableView.getWidth() * 0.2);
+    	problemManChoice2Column.setPrefWidth(templateManProblemTableView.getWidth() * 0.2);
+    	problemManTypeColumn.setPrefWidth(templateManProblemTableView.getWidth() * 0.1);
+    	templateManTemplateTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Template>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Template> observable, Template oldValue, Template newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) {
+					templateManProblemList.clear();
+					return ;
+				} else {
+					templateManProblemList.setAll(newValue.getProblems());
+				}
+				
+			}
+		});
+    	//初始化选择框
+    	ObservableList<Problem> tempList = FXCollections.observableArrayList();
+    	tempList.setAll(Database.getInstance().getProblems());
+    	templateManProblemChoiceBox.setItems(tempList);
+    	templateManProblemChoiceBox.setConverter(new StringConverter<Problem>() {
+			
+			@Override
+			public String toString(Problem object) {
+				// TODO Auto-generated method stub
+				return "问题id-" + String.valueOf(object.getId()) + "-问题描述-" + (object.getDescription().length() > 10 ? object.getDescription().substring(0, 10) : object.getDescription());
+			}
+			
+			@Override
+			public Problem fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+    	templateManProblemChoiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Problem>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Problem> observable, Problem oldValue, Problem newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) {
+					templateManProblemLabel.setText("");
+					templateManAnsLabel.setText("");
+					templateManTypeLabel.setText("");
+					templateManChoice0Lable.setText("");
+					templateManChoice1Label.setText("");
+					templateManChoice2Label.setText("");
+				} else {
+					templateManProblemLabel.setText(newValue.getDescription());
+					templateManAnsLabel.setText(String.valueOf(newValue.getAns() + 1));
+					templateManTypeLabel.setText(newValue.getType());
+					templateManChoice0Lable.setText(newValue.getChoice().get(0));
+					templateManChoice1Label.setText(newValue.getChoice().get(1));
+					templateManChoice2Label.setText(newValue.getChoice().get(2));
+					
+				}
+			}
+		});
+    	
     	
     }
+//[end]
 //------------------------------------------------------问题管理--------------------------------------------------------------------
 //[start]
     private ObservableList<Problem> problemManProblemList = FXCollections.observableArrayList();
@@ -943,6 +1231,7 @@ public class MainInterfaceController{
     @FXML
     private void problemManConfirmButtonFired() {
     	Problem problem = problemTableView.getSelectionModel().getSelectedItem();
+    	if(problem == null) return ;
     	problem.setAns(problemManAnsChoiceBox.getSelectionModel().getSelectedItem());
     	problem.setType(problemManTypeChoiceBox.getSelectionModel().getSelectedItem());
     	problem.setDescription(problemManDescriptionField.getText());
@@ -978,6 +1267,7 @@ public class MainInterfaceController{
     	problemManIdColumn.setCellValueFactory(new PropertyValueFactory<Problem, Long>("id"));
     	problemManDescriptionColumn.setCellValueFactory(new PropertyValueFactory<Problem, String>("description"));
     	problemManTypeColumn.setCellValueFactory(new PropertyValueFactory<Problem, String>("type"));
+    	
     	problemManChoice0Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Problem,String>, ObservableValue<String>>() {
 
 			@Override
@@ -1071,7 +1361,6 @@ public class MainInterfaceController{
     }
     
 //[end]
-    
 //------------------------------------------------------楼宇管理--------------------------------------------------------------------
 //[start]
     //[start]
@@ -1529,7 +1818,7 @@ public class MainInterfaceController{
     
 //[end]
 
-    public void initialize() {
+    public void init() {
 		patientManagementInit();
 		bedManagementInit();
 		rareManagementInit();

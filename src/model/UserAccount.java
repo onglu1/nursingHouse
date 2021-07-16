@@ -1,9 +1,56 @@
 package model;
 
-public class UserAccount implements Comparable<UserAccount>{
-	private String userName;
-	private String password;
-//	private 
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javafx.util.converter.LocalDateStringConverter;
+
+public class UserAccount implements Serializable, Comparable<UserAccount>{
+	private String userName = "";
+	private String name = "";
+	private String password = "";
+	private String titile = "";
+	private LocalDate birth = LocalDate.now();
+	private String expertise = "";
+	private String idNumber = "";
+	private String phoneNumber = "";
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTitile() {
+		return titile;
+	}
+	public void setTitile(String titile) {
+		this.titile = titile;
+	}
+	public LocalDate getBirth() {
+		return birth;
+	}
+	public void setBirth(LocalDate birth) {
+		this.birth = birth;
+	}
+	public String getExpertise() {
+		return expertise;
+	}
+	public void setExpertise(String expertise) {
+		this.expertise = expertise;
+	}
+	public String getIdNumber() {
+		return idNumber;
+	}
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	//	private 
 	public String getUserName() {
 		return userName;
 	}
@@ -20,6 +67,7 @@ public class UserAccount implements Comparable<UserAccount>{
 		this.userName = userName;
 		this.password = password;
 	}
+	
 	@Override
 	public int compareTo(UserAccount o) {
 		// TODO Auto-generated method stub
@@ -54,5 +102,11 @@ public class UserAccount implements Comparable<UserAccount>{
 			return false;
 		return true;
 	}
-	
+	public String getByChinese(String chinese) {
+		if(chinese.equals("登录名")) return userName;
+		if(chinese.equals("姓名")) return name;
+		if(chinese.equals("专长")) return expertise;
+		if(chinese.equals("身份证")) return idNumber;
+		return "";
+	}
 }

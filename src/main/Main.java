@@ -27,7 +27,7 @@ public class Main extends Application{
 		stage.getIcons().add(new Image("/icon/nursingHouse.png"));
 		stage.show();
 		MainInterfaceController ctr = fx.getController();
-		ctr.initialize();
+		ctr.init();
 	}
 	
 }

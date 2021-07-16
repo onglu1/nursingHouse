@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Problem {
+public class Problem implements Serializable{
 	public final static String[] TYPES = {"A", "B"};
 	private String description = "";
 	private int ans = 0;

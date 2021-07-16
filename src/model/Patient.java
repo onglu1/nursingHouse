@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
-public class Patient {
+public class Patient implements Serializable{
 	private String name;
 	private int age;
 	private String id;
@@ -11,7 +12,14 @@ public class Patient {
 	private String phoneNumber;
 	private String emergencyContact;
 	private String emergencyPhoneNumber;
+	private double score = 0.0;
 	
+	public Double getScore() {
+		return score;
+	}
+	public void setScore(Double score) {
+		this.score = score;
+	}
 	public String getId() {
 		return id;
 	}
