@@ -58,6 +58,9 @@ public class Room implements Serializable {
 	}
 
 
+	public Room() {
+	}
+
 	public int getMaxCapacity() {
 		return maxCapacity;
 	}

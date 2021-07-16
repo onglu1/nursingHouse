@@ -42,5 +42,7 @@ public class Bed implements Serializable{
 	public String toString() {
 		return this.name;
 	}
+	public Bed() {
+	}
 	
 }

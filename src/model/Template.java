@@ -33,9 +33,14 @@ public class Template implements Serializable{
 	public void setId(long id) {
 		this.id = id;
 	}
+	public static Template newTemplate() {
+		Template template = new Template();
+		template.id = Database.getInstance().getTemplateId();
+		Database.getInstance().setTemplateId(template.id + 1);
+		return template;
+	}
 	public Template() {
-		this.id = Database.getInstance().getTemplateId();
-		Database.getInstance().setTemplateId(this.id + 1);
+		
 	}
 	public Template(String name) {
 		this.id = Database.getInstance().getTemplateId();

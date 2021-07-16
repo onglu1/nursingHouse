@@ -25,6 +25,9 @@ public class Level implements Serializable {
 		this.father = father;
 	}
 
+	public Level() {
+	}
+
 	public Building getFather() {
 		return father;
 	}

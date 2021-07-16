@@ -90,6 +90,8 @@ public class Patient implements Serializable{
 		else if(s.equals("紧急联系电话")) return this.emergencyPhoneNumber;
 		return "";
 	}
+	public Patient() {
+	}
 	@Override
 	public String toString() {
 		return name;

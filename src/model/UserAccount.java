@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import javafx.util.converter.LocalDateStringConverter;
 
-public class UserAccount implements Serializable, Comparable<UserAccount>{
+public class UserAccount implements Comparable<UserAccount>{
 	private String userName = "";
 	private String name = "";
 	private String password = "";
@@ -81,6 +81,20 @@ public class UserAccount implements Serializable, Comparable<UserAccount>{
 		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
+	
+	public UserAccount() {
+	}
+	//	public UserAccount(String userName, String name, String password, String titile, LocalDate birth, String expertise,
+//			String idNumber, String phoneNumber) {
+//		this.userName = userName;
+//		this.name = name;
+//		this.password = password;
+//		this.titile = titile;
+//		this.birth = birth;
+//		this.expertise = expertise;
+//		this.idNumber = idNumber;
+//		this.phoneNumber = phoneNumber;
+//	}
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -109,4 +123,11 @@ public class UserAccount implements Serializable, Comparable<UserAccount>{
 		if(chinese.equals("身份证")) return idNumber;
 		return "";
 	}
+	@Override
+	public String toString() {
+		return "UserAccount [userName=" + userName + ", name=" + name + ", password=" + password + ", titile=" + titile
+				+ ", birth=" + birth + ", expertise=" + expertise + ", idNumber=" + idNumber + ", phoneNumber="
+				+ phoneNumber + "]";
+	}
+	
 }

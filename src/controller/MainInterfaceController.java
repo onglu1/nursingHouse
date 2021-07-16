@@ -173,6 +173,18 @@ public class MainInterfaceController{
     //[end]
     //评估病患
     @FXML
+    private void patientManRemoveButtonFired() {
+    	Patient patient = patientTableView.getSelectionModel().getSelectedItem();
+    	if(patient == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请在表中选择要删除的病患。");
+    		alert.show();
+    		return ;
+    	}
+    	Database.getInstance().getPatients().remove(patient);
+    	Database.saveToFile();
+    	patientManagementInit();
+    }
+    @FXML
     private void patientEvaluateButtonFIred() throws Exception {
     	Patient patient = patientTableView.getSelectionModel().getSelectedItem();
     	Template template = patientManTemplateChoiceBox.getSelectionModel().getSelectedItem();
@@ -201,6 +213,7 @@ public class MainInterfaceController{
 			public void handle(WindowEvent arg0) {
 				// TODO Auto-generated method stub
 				patientManagementInit();
+				Database.saveToFile();
 			}
 		});
     }
@@ -219,6 +232,7 @@ public class MainInterfaceController{
 					Database.getInstance().getPatients().add(Database.getInstance().getTmppatient());
 				Database.getInstance().setTmppatient(null);
 				patientList.setAll(Database.getInstance().getPatients());
+				Database.saveToFile();
 			}
 		});
     	
@@ -251,6 +265,7 @@ public class MainInterfaceController{
 				Database.getInstance().idNumber = null;
 				Database.getInstance().setTmppatient(null);
 				patientList.setAll(Database.getInstance().getPatients());
+				Database.saveToFile();
 			}
 		});
     }
@@ -304,6 +319,7 @@ public class MainInterfaceController{
     }
 	
     //初始化病患管理界面
+    @FXML
     void patientManagementInit() {
     	patientList.clear();
     	patientTableView.getColumns().clear();
@@ -404,6 +420,24 @@ public class MainInterfaceController{
     @FXML
     private Label bedManInfoLabel;
     //[end]
+    //删除记录
+    @FXML
+    private void bedManRemoveButtonFired() {
+    	CheckInInfo checkInInfo = bedTableView.getSelectionModel().getSelectedItem();
+    	if(checkInInfo == null) {
+    		Alert alert = new Alert(AlertType.ERROR, "请先在表中选择数据。");
+    		alert.show();
+    		return ;
+    	}
+    	if(checkInInfo.isInBed() == true) {
+    		Alert alert = new Alert(AlertType.ERROR, "所选病人尚未出院，无法删除");
+    		alert.show();
+    		return ;
+    	}
+    	Database.getInstance().getCheckInInfos().remove(checkInInfo);
+    	Database.saveToFile();
+    	bedManagementInit();
+    }
     //入住按钮触发事件
     @FXML
     private void checkInButtonFired() {
@@ -461,6 +495,7 @@ public class MainInterfaceController{
     			, true));
     	bedManInfoLabel.setText("");
     	bedManagementInit();
+		Database.saveToFile();
     	
     }
     //找到空闲床位
@@ -494,6 +529,7 @@ public class MainInterfaceController{
     	checkInInfo.setInBed(false);
     	checkInInfo.getBed().setOwner(null);
     	bedManagementInit();
+		Database.saveToFile();
     	return ;
     }
     //调换床位
@@ -513,6 +549,7 @@ public class MainInterfaceController{
     	bedTableView.getSelectionModel().getSelectedItems().get(0).setBed(bed1);
     	bedTableView.getSelectionModel().getSelectedItems().get(1).setBed(bed0);
     	bedManagementInit();
+		Database.saveToFile();
     	return ;
     }
     //初始化床位管理系统
@@ -828,7 +865,7 @@ public class MainInterfaceController{
     	}
     	Room room = rareTableView.getSelectionModel().getSelectedItem();
     	Patient patient = rareAplicationPatientChoice.getSelectionModel().getSelectedItem();
-    	long time = Long.parseLong(rareApplicationTimeField.getText());
+    	long time = Long.parseLong(rareApplicationTimeField.getText()) * RareRoomApplication.TIMESCALE;
 //    	room.getApplicationList().add(e);
 //    	if(room)
     	room.refreshApplicationTime();
@@ -852,8 +889,10 @@ public class MainInterfaceController{
     	room.getApplicationList().add(new RareRoomApplication(new Date(), time, patient, room));
     	room.refreshApplicationTime();
     	rareManagementInit();
+		Database.saveToFile();
     }
     //稀有设备管理界面初始化
+    @FXML
     private void rareManagementInit() {
     	//初始化表格
     	//[start]
@@ -980,6 +1019,7 @@ public class MainInterfaceController{
     	template.getProblems().remove(problem);
     	templateManagementInit();
     	templateManTemplateTableView.getSelectionModel().select(template);
+		Database.saveToFile();
     }
     //添加问题
     @FXML
@@ -991,6 +1031,7 @@ public class MainInterfaceController{
     	template.getProblems().add(problem);
     	templateManagementInit();
     	templateManTemplateTableView.getSelectionModel().select(template);
+		Database.saveToFile();
     }
     //搜索模板
     @FXML
@@ -1014,12 +1055,14 @@ public class MainInterfaceController{
     	if(template == null) return ;
     	Database.getInstance().getTemplates().remove(template);
     	templateManagementInit();
+		Database.saveToFile();
     }
     //添加模板
     @FXML
     private void templateManAddTemplateButtonFired() {
-    	Database.getInstance().getTemplates().add(new Template());
+    	Database.getInstance().getTemplates().add(Template.newTemplate());
     	templateManagementInit();
+		Database.saveToFile();
     }
     @FXML
     void templateManagementInit() {
@@ -1205,6 +1248,7 @@ public class MainInterfaceController{
     	Problem problem = problemTableView.getSelectionModel().getSelectedItem();
     	Database.getInstance().getProblems().remove(problem);
     	problemManagementInit();
+		Database.saveToFile();
     }
     //搜索键按下
     @FXML
@@ -1226,6 +1270,7 @@ public class MainInterfaceController{
     private void problemManAddButtonFired() {
     	Database.getInstance().getProblems().add(new Problem());
     	problemManagementInit();
+		Database.saveToFile();
     }
     //确认键按下
     @FXML
@@ -1239,10 +1284,12 @@ public class MainInterfaceController{
     	problem.getChoice().set(1, problemManChoice1.getText());
     	problem.getChoice().set(2, problemManChoice2.getText());
     	problemManagementInit();
+		Database.saveToFile();
     	
     }
     
     //初始化问题管理界面
+    @FXML
     private void problemManagementInit() {
     	//清空重置
     	problemTableView.getColumns().clear();
@@ -1450,6 +1497,7 @@ public class MainInterfaceController{
     		buildingList.getItems().setAll(Database.getInstance().getBuildings());
     		buildingField.setText("");
     	}
+		Database.saveToFile();
     }
     
     //删除大楼
@@ -1472,6 +1520,7 @@ public class MainInterfaceController{
         		bedList.getItems().clear();
     		}
     	}
+		Database.saveToFile();
     }
     
     //新建楼层
@@ -1493,8 +1542,8 @@ public class MainInterfaceController{
     		father.getLevels().add(new Level(name, father));
     		levelList.getItems().setAll(father.getLevels());
     		levelField.setText("");
-    		
     	}
+		Database.saveToFile();
     }
     
     //删除楼层
@@ -1517,6 +1566,7 @@ public class MainInterfaceController{
         		bedList.getItems().clear();
     		}
     	}
+		Database.saveToFile();
     }
     
     //添加房间
@@ -1557,6 +1607,7 @@ public class MainInterfaceController{
     		maxCapacityField.setText("");
     		isRareChoice.getSelectionModel().clearSelection();
     		rareTypeChoice.getSelectionModel().clearSelection();
+			Database.saveToFile();
     	}
     	
     }
@@ -1578,6 +1629,7 @@ public class MainInterfaceController{
     			father.getRooms().remove(roomList.getSelectionModel().getSelectedItem());
         		roomList.getItems().setAll(father.getRooms());
         		bedList.getItems().clear();
+				Database.saveToFile();
     		}
     	}
     }
@@ -1603,6 +1655,7 @@ public class MainInterfaceController{
     		father.getBeds().add(new Bed(name, father));
     		bedList.getItems().setAll(father.getBeds());
     		bedField.setText("");
+			Database.saveToFile();
     		
     	}
     }
@@ -1622,16 +1675,32 @@ public class MainInterfaceController{
     		if(result.get() == ButtonType.OK) {
     			father.getBeds().remove(bedList.getSelectionModel().getSelectedItem());
     			bedList.getItems().setAll(father.getBeds());
+				Database.saveToFile();
     		}
     	}
     	
     }
     //楼宇管理初始化
+    @FXML
     void buildingManagementInit() {
+    	//清理数据
+    	buildingList.getItems().clear();
+    	levelList.getItems().clear();
+    	roomList.getItems().clear();
+    	bedList.getItems().clear();
+    	buildingField.setText("");
+    	levelField.setText("");
+    	roomField.setText("");
+    	isRareChoice.getItems().clear();
+    	rareTypeChoice.getItems().clear();
+    	maxCapacityField.setText("");
+    	bedField.setText("");
+    	roomInfoField.setText("");
     	buildingModifier.setVisible(false);
     	levelModifier.setVisible(false);
     	roomModifier.setVisible(false);
     	bedModifier.setVisible(false);
+//    	buildingList.setItems(n);
     	//设置房间信息展示栏
     	roomInfoField.setText("");
     	//添加房间选项栏
@@ -1817,7 +1886,24 @@ public class MainInterfaceController{
     }
     
 //[end]
-
+    @FXML
+    private TabPane evaluateTabPane;
+    @FXML
+    private Tab templateTab;
+    @FXML
+    private void evaluateTabChoiced() {
+    	templateManagementInit();
+    	evaluateTabPane.getSelectionModel().select(templateTab);
+    }
+    @FXML
+    private TabPane userTabPane;
+    @FXML
+    private Tab patientTab;
+    @FXML
+    private void userTabChoiced() {
+    	patientManagementInit();
+    	userTabPane.getSelectionModel().select(patientTab);
+    }
     public void init() {
 		patientManagementInit();
 		bedManagementInit();

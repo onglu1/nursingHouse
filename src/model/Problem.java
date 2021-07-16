@@ -36,16 +36,21 @@ public class Problem implements Serializable{
 		this.ans = ans;
 	}
 
+
 	public ArrayList<String> getChoice() {
 		return choice;
 	}
 	public void setChoice(ArrayList<String> choice) {
 		this.choice = choice;
 	}
-	
+	public static Problem newProblem() {
+		Problem problem = new Problem();
+		problem.id = Database.getInstance().getProblemId();
+		Database.getInstance().setProblemId(problem.id + 1);
+		return problem;
+	}
 	public Problem() {
-		this.id = Database.getInstance().getProblemId();
-		Database.getInstance().setProblemId(this.id + 1);
+		
 	}
 	public Problem(String description, int ans, ArrayList<String> choice, String type) {
 		this.description = description;

@@ -7,12 +7,14 @@ import java.util.Date;
 import model.Patient;
 
 public class RareRoomApplication implements Serializable {
-	private long timescale = 1000 * 60 * 60;
+	public static long TIMESCALE = 1000 * 60 * 60;
 	private Date startTime;
 	private long durationTime;
 	private Patient applier;
 	private Room room;
 	public Date getStartTime() {
+//		System.out.println(startTime);
+//		System.out.println(durationTime);
 		return startTime;
 	}
 	public void setStartTime(Date startTime) {
@@ -22,10 +24,10 @@ public class RareRoomApplication implements Serializable {
 		return durationTime;
 	}
 	public void setDurationTime(long durationTime) {
-		this.durationTime = durationTime * timescale;
+		this.durationTime = durationTime;
 	}
 	public void setDurationTime(int durationTime) {
-		this.durationTime = durationTime * timescale;
+		this.durationTime = durationTime;
 	}
 	public Patient getApplier() {
 		return applier;
@@ -41,13 +43,16 @@ public class RareRoomApplication implements Serializable {
 	}
 	public RareRoomApplication(Date startTime, long durationTime, Patient applier, Room room) {
 		this.startTime = startTime;
-		this.durationTime = durationTime * timescale;
+		this.durationTime = durationTime;
 		this.applier = applier;
 		this.room = room;
 	}
+	
+	public RareRoomApplication() {
+	}
 	public RareRoomApplication(Date startTime, int durationTime, Patient applier, Room room) {
 		this.startTime = startTime;
-		this.durationTime = durationTime * timescale;
+		this.durationTime = durationTime;
 		this.applier = applier;
 		this.room = room;
 	}

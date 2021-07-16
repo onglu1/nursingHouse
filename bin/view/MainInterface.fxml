@@ -21,13 +21,13 @@
    <children>
       <TabPane fx:id="choinePane" layoutX="174.0" layoutY="-39.0" prefHeight="689.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-39.0">
         <tabs>
-          <Tab fx:id="userTab" text="用户管理">
+          <Tab fx:id="userTab" onSelectionChanged="#userTabChoiced" text="用户管理">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane layoutX="164.0" layoutY="18.0" prefHeight="650.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TabPane fx:id="userTabPane" layoutX="164.0" layoutY="18.0" prefHeight="650.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <tabs>
-                            <Tab text="病患管理">
+                            <Tab fx:id="patientTab" onSelectionChanged="#patientManagementInit" text="病患管理">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -44,6 +44,11 @@
                                                             <Insets left="5.0" />
                                                          </HBox.margin></Button>
                                                       <Button mnemonicParsing="false" onAction="#patientEvaluateButtonFIred" text="评估">
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button layoutX="75.0" layoutY="23.0" mnemonicParsing="false" onAction="#patientManRemoveButtonFired" text="删除">
                                                          <HBox.margin>
                                                             <Insets left="5.0" />
                                                          </HBox.margin>
@@ -180,6 +185,7 @@
                                                 </HBox>
                                                 <HBox alignment="BOTTOM_RIGHT" prefHeight="5.0" prefWidth="900.0">
                                                    <children>
+                                                      <Button mnemonicParsing="false" onAction="#bedManRemoveButtonFired" text="删除" />
                                                       <Button mnemonicParsing="false" onAction="#checkOutButtonFired" text="退院">
                                                          <HBox.margin>
                                                             <Insets left="10.0" />
@@ -205,7 +211,7 @@
                                        </children></AnchorPane>
                               </content>
                             </Tab>
-                              <Tab text="稀有设备管理">
+                              <Tab onSelectionChanged="#rareManagementInit" text="稀有设备管理">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -269,13 +275,13 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab fx:id="evaluateTab" text="评估管理">
+          <Tab fx:id="evaluateTab" onSelectionChanged="#evaluateTabChoiced" text="评估管理">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane prefHeight="650.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="evaluateTabPane" prefHeight="650.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                            <tabs>
-                              <Tab onSelectionChanged="#templateManagementInit" text="模板管理">
+                              <Tab fx:id="templateTab" onSelectionChanged="#templateManagementInit" text="模板管理">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -417,7 +423,7 @@
                                     </AnchorPane>
                                  </content>
                               </Tab>
-                              <Tab text="问题管理">
+                              <Tab onSelectionChanged="#problemManagementInit" text="问题管理">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -521,7 +527,7 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-            <Tab fx:id="buildingTab" text="楼宇管理">
+            <Tab fx:id="buildingTab" onSelectionChanged="#buildingManagementInit" text="楼宇管理">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>

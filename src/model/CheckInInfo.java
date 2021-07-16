@@ -49,5 +49,7 @@ public class CheckInInfo implements Serializable{
 		this.checkOutTime = checkOutTime;
 		this.isInBed = isInBed;
 	}
+	public CheckInInfo() {
+	}
 	
 }
