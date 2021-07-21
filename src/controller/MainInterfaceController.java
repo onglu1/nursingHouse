@@ -1,12 +1,9 @@
 package controller;
 
-import java.net.FileNameMap;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import building.Bed;
@@ -23,11 +20,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -41,6 +38,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
@@ -59,11 +57,13 @@ import javafx.util.Duration;
 import javafx.util.StringConverter;
 import main.AddPatient;
 import main.Evaluate;
+import main.Login;
 import model.CheckInInfo;
 import model.Database;
 import model.Patient;
 import model.Problem;
 import model.Template;
+import utils.DragWindowHandler;
 
 public class MainInterfaceController{
 //------------------------------------------------------界面管理--------------------------------------------------------------------
@@ -120,6 +120,20 @@ public class MainInterfaceController{
     	}
     	
     }
+    //登出
+    @FXML
+    void logoutButtonFired() {
+    	Login main = new Login();
+    	Stage stage = new Stage();
+    	try {
+			main.start(stage);
+			stage.show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	thisStage.hide();
+    }
 //[end]
 //------------------------------------------------------病患管理--------------------------------------------------------------------
 //[start]
@@ -174,13 +188,21 @@ public class MainInterfaceController{
     //评估病患
     @FXML
     private void patientManRemoveButtonFired() {
-    	Patient patient = patientTableView.getSelectionModel().getSelectedItem();
-    	if(patient == null) {
+    	if(patientTableView.getSelectionModel().getSelectedItems().size() == 0) {
     		Alert alert = new Alert(AlertType.ERROR, "请在表中选择要删除的病患。");
     		alert.show();
     		return ;
     	}
-    	Database.getInstance().getPatients().remove(patient);
+    	Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("警告");
+		alert.getButtonTypes().add(ButtonType.CANCEL);
+		alert.setContentText("该操作不可逆，请确认是否删除。");
+		Optional<ButtonType> result = alert.showAndWait();
+		if(result.get() != ButtonType.OK) return ;
+		for(Patient patient2 : patientTableView.getSelectionModel().getSelectedItems()) {
+			Database.getInstance().getPatients().remove(patient2);
+		}
+    	
     	Database.saveToFile();
     	patientManagementInit();
     }
@@ -190,6 +212,11 @@ public class MainInterfaceController{
     	Template template = patientManTemplateChoiceBox.getSelectionModel().getSelectedItem();
     	if(template == null) {
     		Alert alert = new Alert(AlertType.ERROR, "请选择模板。");
+    		alert.show();
+    		return ;
+    	}
+    	if(template.getProblems().size() == 0) {
+    		Alert alert = new Alert(AlertType.ERROR, "当前模板不包含问题，请先在评估管理界面中。");
     		alert.show();
     		return ;
     	}
@@ -321,6 +348,7 @@ public class MainInterfaceController{
     //初始化病患管理界面
     @FXML
     void patientManagementInit() {
+    	patientTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	patientList.clear();
     	patientTableView.getColumns().clear();
     	patientList.setAll(Database.getInstance().getPatients());
@@ -367,14 +395,15 @@ public class MainInterfaceController{
 		phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("phoneNumber"));
 		emergencyContactColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("emergencyContact"));
 		emergencyPhoneNumberColumn.setCellValueFactory(new PropertyValueFactory<Patient, String>("emergencyPhoneNumber"));
-		nameColumn.setPrefWidth(patientTableView.getWidth() * 0.1);
-		idColumn.setPrefWidth(patientTableView.getWidth() * 0.21);
-		ageColumn.setPrefWidth(patientTableView.getWidth() * 0.07);
-		sexColumn.setPrefWidth(patientTableView.getWidth() * 0.07);
-		phoneNumberColumn.setPrefWidth(patientTableView.getWidth() * 0.13);
-		emergencyContactColumn.setPrefWidth(patientTableView.getWidth() * 0.1);
-		emergencyPhoneNumberColumn.setPrefWidth(patientTableView.getWidth() * 0.13);
-		scoreColumn.setPrefWidth(patientTableView.getWidth() * 0.14);
+		double p = patientTableView.getWidth();
+		nameColumn.setPrefWidth(patientTableView.getWidth() * 0.1); p -= nameColumn.getPrefWidth();
+		idColumn.setPrefWidth(patientTableView.getWidth() * 0.21); p -= idColumn.getPrefWidth();
+		ageColumn.setPrefWidth(patientTableView.getWidth() * 0.07); p -= ageColumn.getPrefWidth();
+		sexColumn.setPrefWidth(patientTableView.getWidth() * 0.07); p -= sexColumn.getPrefWidth();
+		phoneNumberColumn.setPrefWidth(patientTableView.getWidth() * 0.16); p -= phoneNumberColumn.getPrefWidth();
+		emergencyContactColumn.setPrefWidth(patientTableView.getWidth() * 0.1); p -= emergencyContactColumn.getPrefWidth();
+		emergencyPhoneNumberColumn.setPrefWidth(patientTableView.getWidth() * 0.16); p -= emergencyPhoneNumberColumn.getPrefWidth();
+		scoreColumn.setPrefWidth(p - 3);
 		
 		patientTableView.getColumns().add(nameColumn);
 		patientTableView.getColumns().add(ageColumn);
@@ -385,6 +414,7 @@ public class MainInterfaceController{
 		patientTableView.getColumns().add(emergencyPhoneNumberColumn);
 		patientTableView.getColumns().add(scoreColumn);
 		
+		searchChoice.getItems().clear();
 		searchChoice.getItems().add("姓名");
 		searchChoice.getItems().add("年龄");
 		searchChoice.getItems().add("身份证号码");
@@ -434,7 +464,17 @@ public class MainInterfaceController{
     		alert.show();
     		return ;
     	}
-    	Database.getInstance().getCheckInInfos().remove(checkInInfo);
+    	Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("警告");
+		alert.getButtonTypes().add(ButtonType.CANCEL);
+		alert.setContentText("该操作不可逆，请确认是否删除。");
+		Optional<ButtonType> result = alert.showAndWait();
+		if(result.get() != ButtonType.OK) return ;
+		
+    	for(CheckInInfo info : bedTableView.getSelectionModel().getSelectedItems()) {
+    		Database.getInstance().getCheckInInfos().remove(info);
+    	}
+    	
     	Database.saveToFile();
     	bedManagementInit();
     }
@@ -537,6 +577,16 @@ public class MainInterfaceController{
     private void swapBedButtonFired() {
     	if(bedTableView.getSelectionModel().getSelectedItems().size() != 2) {
     		Alert alert = new Alert(AlertType.ERROR, "选择的床位不正确（需要恰好两个选择）");
+    		alert.show();
+    		return ;
+    	}
+    	if(bedTableView.getSelectionModel().getSelectedItems().get(0).isInBed() == false) {
+    		Alert alert = new Alert(AlertType.ERROR, "第一个记录已经失效（已出院记录）");
+    		alert.show();
+    		return ;
+    	}
+    	if(bedTableView.getSelectionModel().getSelectedItems().get(1).isInBed() == false) {
+    		Alert alert = new Alert(AlertType.ERROR, "第二个记录已经失效（已出院记录）");
     		alert.show();
     		return ;
     	}
@@ -1078,8 +1128,17 @@ public class MainInterfaceController{
 		templateManChoice1Label.setText("");
 		templateManChoice2Label.setText("");
     	templateManProblemChoiceBox.getSelectionModel().clearSelection();
-    	templateManTemplateTableView.setEditable(true);
     	
+    	templateManTemplateTableView.setEditable(true);
+    	for(Template template : Database.getInstance().getTemplates()) {
+    		for(int i = 0; i < template.getProblems().size(); i++) {
+    			Problem problem = template.getProblems().get(i);
+    			if(!Database.getInstance().getProblems().contains(problem)) {
+    				template.getProblems().remove(problem);
+    				i--;
+    			}
+    		}
+    	}
     	//设置模板表格的显示
     	templateManTemplateList.setAll(Database.getInstance().getTemplates());
     	templateManTemplateTableView.setItems(templateManTemplateList);
@@ -1268,7 +1327,7 @@ public class MainInterfaceController{
     //新增键按下
     @FXML
     private void problemManAddButtonFired() {
-    	Database.getInstance().getProblems().add(new Problem());
+    	Database.getInstance().getProblems().add(Problem.newProblem());
     	problemManagementInit();
 		Database.saveToFile();
     }
@@ -1512,13 +1571,12 @@ public class MainInterfaceController{
     		alert.getButtonTypes().add(ButtonType.CANCEL);
     		alert.setContentText("该操作不可逆，请确认是否删除。");
     		Optional<ButtonType> result = alert.showAndWait();
-    		if(result.get() == ButtonType.OK) {
-    			Database.getInstance().getBuildings().remove(buildingList.getSelectionModel().getSelectedItem());
-        		buildingList.getItems().setAll(Database.getInstance().getBuildings());
-            	levelList.getItems().clear();
-        		roomList.getItems().clear();
-        		bedList.getItems().clear();
-    		}
+    		if(result.get() != ButtonType.OK) return ;
+			Database.getInstance().getBuildings().remove(buildingList.getSelectionModel().getSelectedItem());
+    		buildingList.getItems().setAll(Database.getInstance().getBuildings());
+        	levelList.getItems().clear();
+    		roomList.getItems().clear();
+    		bedList.getItems().clear();
     	}
 		Database.saveToFile();
     }
@@ -1738,12 +1796,17 @@ public class MainInterfaceController{
 				// TODO Auto-generated method stub
 				if(newValue != null) {
 					roomInfoField.setText("是否为稀有房间：" + (newValue.isRareRoom() ? "是" :"否"));
-					if(newValue.isRareRoom())
+					if(newValue.isRareRoom()) {
 						roomInfoField.setText(roomInfoField.getText() 
 								+ "\n" + "房间种类：" + Room.getType(newValue.getRareType())
 								+ "\n" + "最大容量：" + newValue.getMaxCapacity()
 								+ "\n" + "剩余容量：" + newValue.getResCapacity());
-					bedList.getItems().setAll(newValue.getBeds());
+						bedList.setDisable(true);
+						bedList.getItems().clear();
+					} else {
+						bedList.getItems().setAll(newValue.getBeds());
+						bedList.setDisable(false);
+					}
 				} else {
 					roomInfoField.setText("");
 				}
@@ -1886,6 +1949,9 @@ public class MainInterfaceController{
     }
     
 //[end]
+//------------------------------------------------------基本设置--------------------------------------------------------------------
+//[start]
+    
     @FXML
     private TabPane evaluateTabPane;
     @FXML
@@ -1904,13 +1970,71 @@ public class MainInterfaceController{
     	patientManagementInit();
     	userTabPane.getSelectionModel().select(patientTab);
     }
+    @FXML
+    private Text loginLabel;
+	Stage thisStage = null;
+    //关闭窗口
+    @FXML
+    private void closeWindow() {
+    	thisStage.hide();
+    }
+    //最小化窗口
+    @FXML 
+    private void minimizeWindow() { 
+    	thisStage.setIconified(true);
+    }
+//[end]
+
+    
+    void setLengthLimit(TextField text, int length) {
+    	text.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue.length() > length) text.setText(oldValue);
+			}
+		});
+    }
     public void init() {
+    	loginLabel.setText("");
+    	if(Database.getInstance().getLoginUser() != null) {
+    		loginLabel.setText("您好，" + Database.getInstance().getLoginUser().getName()
+    				 + Database.getInstance().getLoginUser().getTitile());
+    	}
+    	thisStage = (Stage)menuShadow.getScene().getWindow();
+    	EventHandler handler = new DragWindowHandler(thisStage);
+    	
+    	userTabPane.setOnMouseDragged(handler);
+    	userTabPane.setOnMousePressed(handler);
+    	
+    	evaluateTabPane.setOnMouseDragged(handler);
+    	evaluateTabPane.setOnMousePressed(handler);
+    	
+    	choinePane.setOnMouseDragged(handler);
+    	choinePane.setOnMousePressed(handler);
 		patientManagementInit();
 		bedManagementInit();
 		rareManagementInit();
 		templateManagementInit();
 		problemManagementInit();
 		buildingManagementInit();
-	}
+		//对所有文本框设置长度限制
+		setLengthLimit(searchField, 20);
+		setLengthLimit(rareApplicationTimeField, 20);
+		setLengthLimit(rareSearchField, 20);
+		setLengthLimit(templateManTemplateSearchField, 20);
+		setLengthLimit(problemManSearchField, 20);
+		setLengthLimit(problemManDescriptionField, 20);
+		setLengthLimit(problemManChoice0, 20);
+		setLengthLimit(problemManChoice1, 20);
+		setLengthLimit(problemManChoice2, 20);
+		setLengthLimit(buildingField, 20);
+		setLengthLimit(levelField, 20);
+		setLengthLimit(roomField, 20);
+		setLengthLimit(maxCapacityField, 20);
+		setLengthLimit(bedField, 20);
 
+	}
 }

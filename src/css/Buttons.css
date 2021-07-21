@@ -1,0 +1,227 @@
+.removeButton{
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/remove-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.removeButton:hover{
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/remove-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.closeButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/close-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.closeButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/close-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+
+.minimizeButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/minimize-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.minimizeButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/minimize-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.addButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/add-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.addButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/add-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.searchButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/search-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.searchButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/search-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.editButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/edit-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.editButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/edit-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.syncButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/sync-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.syncButton:hover {
+	
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/sync-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.evaluateButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/document-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.evaluateButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/document-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.bedButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/bed-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.bedButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/bed-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.offButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/off-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.offButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/off-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.swapButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/swap-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.swapButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/swap-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.backButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/back-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.backButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/back-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.tick48Button {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/tick-48-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.tick48Button:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/tick-48-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.applyButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/apply-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.applyButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/apply-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}
+.logoutButton {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/logout-deep.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+}
+.logoutButton:hover {
+	-fx-text-fill: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url('../../src/icon/logout-light.png');
+	-fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-rotate: -20;
+}

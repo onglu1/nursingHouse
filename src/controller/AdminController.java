@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -31,9 +32,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import main.Login;
 import model.Database;
 import model.UserAccount;
+import utils.DragWindowHandler;
 
 public class AdminController {
 	public final String phonePattern = "^1(3[0-9]|5[0-3,5-9]|7[1-3,5-8]|8[0-9])\\d{8}$";
@@ -129,6 +133,20 @@ public class AdminController {
     	}
     	
     }
+  //登出
+    @FXML
+    void logoutButtonFired() {
+    	Login main = new Login();
+    	Stage stage = new Stage();
+    	try {
+			main.start(stage);
+			stage.show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	thisStage.hide();
+    }
 //[end]
 //------------------------------------------------------医生管理--------------------------------------------------------------------
 //[start]
@@ -176,6 +194,13 @@ public class AdminController {
     		alert.show();
     		return ;
     	}
+		for(UserAccount user : Database.getInstance().getUsers()) {
+			if(user.getUserName().equals(userName)) {
+				Alert alert = new Alert(AlertType.ERROR, "数据库中存在重复用户，请重新输入用户名！");
+	    		alert.show();
+	    		return ;
+			}
+		}
     	TextInputDialog tid1 = new TextInputDialog("");
     	tid1.setTitle("密码");
     	tid1.setGraphic(new ImageView("/icon/password.png"));
@@ -195,6 +220,7 @@ public class AdminController {
     	ua.setTitile("医生");
     	Database.getInstance().getUsers().add(ua);
     	doctorInit();
+		Database.saveToFile();
     	return ;
     }
     //查找医生
@@ -237,9 +263,8 @@ public class AdminController {
     		alert1.show();
     		return ;
 		}
-		Alert alert = new Alert(AlertType.WARNING, "此操作不可恢复，请确认是否删除");
+		Alert alert = new Alert(AlertType.WARNING, "此操作不可恢复，请确认是否修改");
     	alert.getButtonTypes().add(ButtonType.CANCEL);
-    	alert.setContentText("该操作不可逆，请确认是否删除。");
     	Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() != ButtonType.OK) {
 			return ;
@@ -252,6 +277,7 @@ public class AdminController {
     	user.setBirth(doctorManDatePicker.getValue());
     	doctorInit();
     	doctorManTableView.getSelectionModel().select(user);
+		Database.saveToFile();
     }
     //删除医生
     @FXML
@@ -271,7 +297,9 @@ public class AdminController {
 			Database.getInstance().getUsers().remove(user);
     		doctorInit();
 		} 
+		Database.saveToFile();
     }
+    @FXML
     void doctorInit() {
     	//清空数据
     	doctorManNameField.setText("");
@@ -421,6 +449,13 @@ public class AdminController {
     		alert.show();
     		return ;
     	}
+		for(UserAccount user : Database.getInstance().getUsers()) {
+			if(user.getUserName().equals(userName)) {
+				Alert alert = new Alert(AlertType.ERROR, "数据库中存在重复用户，请重新输入用户名！");
+	    		alert.show();
+	    		return ;
+			}
+		}
     	TextInputDialog tid1 = new TextInputDialog("");
     	tid1.setTitle("密码");
     	tid1.setGraphic(new ImageView("/icon/password.png"));
@@ -440,6 +475,7 @@ public class AdminController {
     	ua.setTitile("护士");
     	Database.getInstance().getUsers().add(ua);
     	nurseInit();
+		Database.saveToFile();
     	return ;
     }
     //查找护士
@@ -482,9 +518,8 @@ public class AdminController {
     		alert1.show();
     		return ;
 		}
-		Alert alert = new Alert(AlertType.WARNING, "此操作不可恢复，请确认是否删除");
+		Alert alert = new Alert(AlertType.WARNING, "此操作不可恢复，请确认是否修改");
     	alert.getButtonTypes().add(ButtonType.CANCEL);
-    	alert.setContentText("该操作不可逆，请确认是否删除。");
     	Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() != ButtonType.OK) {
 			return ;
@@ -497,6 +532,7 @@ public class AdminController {
     	user.setBirth(nurseManDatePicker.getValue());
     	nurseInit();
     	nurseManTableView.getSelectionModel().select(user);
+		Database.saveToFile();
     }
     //删除护士
     @FXML
@@ -516,7 +552,9 @@ public class AdminController {
 			Database.getInstance().getUsers().remove(user);
     		nurseInit();
 		} 
+		Database.saveToFile();
     }
+    @FXML
     void nurseInit() {
     	//清空数据
     	nurseManNameField.setText("");
@@ -667,6 +705,13 @@ public class AdminController {
     		alert.show();
     		return ;
     	}
+		for(UserAccount user : Database.getInstance().getUsers()) {
+			if(user.getUserName().equals(userName)) {
+				Alert alert = new Alert(AlertType.ERROR, "数据库中存在重复用户，请重新输入用户名！");
+	    		alert.show();
+	    		return ;
+			}
+		}
     	TextInputDialog tid1 = new TextInputDialog("");
     	tid1.setTitle("密码");
     	tid1.setGraphic(new ImageView("/icon/password.png"));
@@ -686,6 +731,7 @@ public class AdminController {
     	ua.setTitile("护工");
     	Database.getInstance().getUsers().add(ua);
     	workerInit();
+		Database.saveToFile();
     	return ;
     }
     //查找护工
@@ -728,9 +774,8 @@ public class AdminController {
     		alert1.show();
     		return ;
 		}
-		Alert alert = new Alert(AlertType.WARNING, "此操作不可恢复，请确认是否删除");
+		Alert alert = new Alert(AlertType.WARNING, "此操作不可恢复，请确认是否修改");
     	alert.getButtonTypes().add(ButtonType.CANCEL);
-    	alert.setContentText("该操作不可逆，请确认是否删除。");
     	Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() != ButtonType.OK) {
 			return ;
@@ -743,6 +788,7 @@ public class AdminController {
     	user.setBirth(workerManDatePicker.getValue());
     	workerInit();
     	workerManTableView.getSelectionModel().select(user);
+		Database.saveToFile();
     }
     //删除护工
     @FXML
@@ -762,7 +808,9 @@ public class AdminController {
 			Database.getInstance().getUsers().remove(user);
     		workerInit();
 		} 
+		Database.saveToFile();
     }
+    @FXML
     void workerInit() {
     	//清空数据
     	workerManNameField.setText("");
@@ -866,10 +914,55 @@ public class AdminController {
     	workerManPhoneField.setText(user.getPhoneNumber());
     }
 //[end]
+	Stage thisStage = null;
+    //关闭窗口
+    @FXML
+    private void closeWindow() {
+    	thisStage.hide();
+    }
+    //最小化窗口
+    @FXML 
+    private void minimizeWindow() { 
+    	thisStage.setIconified(true);
+    }
+    //输入框长度上限
+    void setLengthLimit(TextField text, int length) {
+    	text.textProperty().addListener(new ChangeListener<String>() {
 
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				// TODO Auto-generated method stub
+				if(newValue == null) return ;
+				if(newValue.length() > length) text.setText(oldValue);
+			}
+		});
+    }
     public void init() {
+
+    	thisStage = (Stage)menuShadow.getScene().getWindow();
+		EventHandler handler = new DragWindowHandler(thisStage);
+    	choinePane.setOnMouseDragged(handler);
+    	choinePane.setOnMousePressed(handler);
     	doctorInit();
     	nurseInit();
     	workerInit();
+    	setLengthLimit(doctorManSearchField, 20);
+    	setLengthLimit(doctorManNameField, 20);
+    	setLengthLimit(doctorManExpertiseField, 20);
+    	setLengthLimit(doctorManIdField, 20);
+    	setLengthLimit(doctorManPhoneField, 20);
+    	
+    	setLengthLimit(nurseManSearchField, 20);
+    	setLengthLimit(nurseManNameField, 20);
+    	setLengthLimit(nurseManExpertiseField, 20);
+    	setLengthLimit(nurseManIdField, 20);
+    	setLengthLimit(nurseManPhoneField, 20);
+    	
+    	setLengthLimit(workerManSearchField, 20);
+    	setLengthLimit(workerManNameField, 20);
+    	setLengthLimit(workerManExpertiseField, 20);
+    	setLengthLimit(workerManIdField, 20);
+    	setLengthLimit(workerManPhoneField, 20);
+   
     }
 }

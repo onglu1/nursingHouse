@@ -1,1 +1,1 @@
-[]
+[{"id":1,"name":"名字","problems":[],"type":"A"},{"id":4,"name":"模板4","problems":[{"ans":2,"choice":["5","2","3"],"description":"你是谁","id":29,"type":"B"},{"ans":1,"choice":["人","你","他"],"description":"我是谁","id":28,"type":"B"}],"type":"A"}]

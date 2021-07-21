@@ -17,42 +17,45 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" styleClass="window" stylesheets="@../../bin/css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
-      <TabPane fx:id="choinePane" layoutX="174.0" layoutY="-39.0" prefHeight="689.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-39.0">
+      <TabPane fx:id="choinePane" layoutX="2.0" layoutY="-42.0" prefHeight="692.0" prefWidth="898.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-43.0">
         <tabs>
-          <Tab fx:id="doctorTab" text="医生管理">
+          <Tab fx:id="doctorTab" onSelectionChanged="#doctorInit" text="医生管理">
                <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <VBox layoutX="205.0" layoutY="88.0" prefHeight="523.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0">
                            <children>
-                              <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                              <HBox alignment="CENTER" prefHeight="88.0" prefWidth="896.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#doctorManAddButtonFired" text="新增">
+                                    <Button mnemonicParsing="false" onAction="#doctorManAddButtonFired" prefHeight="30.0" prefWidth="32.0" styleClass="addButton" stylesheets="@../css/Buttons.css" text="新增">
                                        <HBox.margin>
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#doctorManRemoveButtonFired" text="删除">
+                                    <Button mnemonicParsing="false" onAction="#doctorManRemoveButtonFired" prefHeight="30.0" prefWidth="36.0" styleClass="removeButton" stylesheets="@../css/Buttons.css" text="删除">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#doctorManSearchButtonFired" text="查询">
+                                    <Button mnemonicParsing="false" onAction="#doctorManSearchButtonFired" prefHeight="30.0" prefWidth="35.0" styleClass="searchButton" stylesheets="@../css/Buttons.css" text="查询">
                                        <HBox.margin>
                                           <Insets left="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <ChoiceBox fx:id="doctorSearchChoiceBox" prefHeight="23.0" prefWidth="131.0">
+                                    <ChoiceBox fx:id="doctorSearchChoiceBox" prefHeight="36.0" prefWidth="131.0" styleClass="choiceBox">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </ChoiceBox>
-                                    <TextField fx:id="doctorManSearchField" prefHeight="30.0" prefWidth="508.0" promptText="键入你要查询的内容...">
+                                    <TextField fx:id="doctorManSearchField" prefHeight="30.0" prefWidth="508.0" promptText="键入你要查询的内容..." styleClass="textField">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
                                     </TextField>
                                  </children>
                                  <VBox.margin>
@@ -106,12 +109,12 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="doctorManNameField" GridPane.columnIndex="1" />
-                                          <TextField fx:id="doctorManExpertiseField" GridPane.columnIndex="3" />
-                                          <TextField fx:id="doctorManIdField" prefHeight="30.0" prefWidth="161.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                          <TextField fx:id="doctorManPhoneField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                          <ChoiceBox fx:id="doctorManTitleChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Button mnemonicParsing="false" onAction="#doctorManModifyButtonFired" text="修改" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                          <TextField fx:id="doctorManNameField" styleClass="textField" GridPane.columnIndex="1" />
+                                          <TextField fx:id="doctorManExpertiseField" styleClass="textField" GridPane.columnIndex="3" />
+                                          <TextField fx:id="doctorManIdField" prefHeight="30.0" prefWidth="161.0" styleClass="textField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                          <TextField fx:id="doctorManPhoneField" styleClass="textField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                          <ChoiceBox fx:id="doctorManTitleChoiceBox" prefWidth="150.0" styleClass="choiceBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Button mnemonicParsing="false" onAction="#doctorManModifyButtonFired" styleClass="editButton" stylesheets="@../css/Buttons.css" text="修改" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                                           <DatePicker fx:id="doctorManDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
@@ -123,38 +126,41 @@
                   </AnchorPane>
                </content>
           </Tab>
-            <Tab fx:id="nurseTab" text="护士">
+            <Tab fx:id="nurseTab" onSelectionChanged="#nurseInit" text="护士">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <VBox layoutX="205.0" layoutY="88.0" prefHeight="523.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0">
                            <children>
-                              <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                              <HBox alignment="CENTER" prefHeight="93.0" prefWidth="896.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#nurseManAddButtonFired" text="新增">
+                                    <Button mnemonicParsing="false" onAction="#nurseManAddButtonFired" prefHeight="30.0" prefWidth="34.0" styleClass="addButton" stylesheets="@../css/Buttons.css" text="新增">
                                        <HBox.margin>
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#nurseManRemoveButtonFired" text="删除">
+                                    <Button mnemonicParsing="false" onAction="#nurseManRemoveButtonFired" prefHeight="30.0" prefWidth="32.0" styleClass="removeButton" stylesheets="@../css/Buttons.css" text="删除">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#nurseManSearchButtonFired" text="查询">
+                                    <Button mnemonicParsing="false" onAction="#nurseManSearchButtonFired" prefHeight="30.0" prefWidth="36.0" styleClass="searchButton" stylesheets="@../css/Buttons.css" text="查询">
                                        <HBox.margin>
                                           <Insets left="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <ChoiceBox fx:id="nurseSearchChoiceBox" prefHeight="23.0" prefWidth="131.0">
+                                    <ChoiceBox fx:id="nurseSearchChoiceBox" prefHeight="38.0" prefWidth="131.0" styleClass="choiceBox">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </ChoiceBox>
-                                    <TextField fx:id="nurseManSearchField" prefHeight="30.0" prefWidth="508.0" promptText="键入你要查询的内容...">
+                                    <TextField fx:id="nurseManSearchField" prefHeight="30.0" prefWidth="508.0" promptText="键入你要查询的内容..." styleClass="textField">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
                                     </TextField>
                                  </children>
                                  <VBox.margin>
@@ -196,12 +202,12 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="nurseManNameField" GridPane.columnIndex="1" />
-                                          <TextField fx:id="nurseManExpertiseField" GridPane.columnIndex="3" />
-                                          <TextField fx:id="nurseManIdField" prefHeight="30.0" prefWidth="161.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                          <TextField fx:id="nurseManPhoneField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                          <ChoiceBox fx:id="nurseManTitleChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Button mnemonicParsing="false" onAction="#nurseManModifyButtonFired" text="修改" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                          <TextField fx:id="nurseManNameField" styleClass="textField" GridPane.columnIndex="1" />
+                                          <TextField fx:id="nurseManExpertiseField" styleClass="textField" GridPane.columnIndex="3" />
+                                          <TextField fx:id="nurseManIdField" prefHeight="30.0" prefWidth="161.0" styleClass="textField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                          <TextField fx:id="nurseManPhoneField" styleClass="textField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                          <ChoiceBox fx:id="nurseManTitleChoiceBox" prefWidth="150.0" styleClass="choiceBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Button mnemonicParsing="false" onAction="#nurseManModifyButtonFired" styleClass="editButton" stylesheets="@../css/Buttons.css" text="修改" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                                           <DatePicker fx:id="nurseManDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                        <columnConstraints>
@@ -225,48 +231,51 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab fx:id="workerTab" text="护工">
+            <Tab fx:id="workerTab" onSelectionChanged="#workerInit" text="护工">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <VBox layoutX="205.0" layoutY="88.0" prefHeight="523.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0">
                            <children>
-                              <HBox alignment="BOTTOM_LEFT" prefHeight="36.0" prefWidth="894.0">
+                              <HBox alignment="CENTER" prefHeight="40.0" prefWidth="896.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#workerManAddButtonFired" text="新增">
+                                    <Button mnemonicParsing="false" onAction="#workerManAddButtonFired" prefHeight="30.0" prefWidth="29.0" styleClass="addButton" stylesheets="@../css/Buttons.css" text="新增">
                                        <HBox.margin>
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#workerManRemoveButtonFired" text="删除">
+                                    <Button mnemonicParsing="false" onAction="#workerManRemoveButtonFired" prefHeight="30.0" prefWidth="31.0" styleClass="removeButton" stylesheets="@../css/Buttons.css" text="删除">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#workerManSearchButtonFired" text="查询">
+                                    <Button mnemonicParsing="false" onAction="#workerManSearchButtonFired" prefHeight="30.0" prefWidth="37.0" styleClass="searchButton" stylesheets="@../css/Buttons.css" text="查询">
                                        <HBox.margin>
                                           <Insets left="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <ChoiceBox fx:id="workerSearchChoiceBox" prefHeight="23.0" prefWidth="131.0">
+                                    <ChoiceBox fx:id="workerSearchChoiceBox" prefHeight="39.0" prefWidth="131.0" styleClass="choiceBox">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </ChoiceBox>
-                                    <TextField fx:id="workerManSearchField" prefHeight="30.0" prefWidth="508.0" promptText="键入你要查询的内容...">
+                                    <TextField fx:id="workerManSearchField" prefHeight="36.0" prefWidth="527.0" promptText="键入你要查询的内容..." styleClass="textField">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
                                     </TextField>
                                  </children>
                                  <VBox.margin>
                                     <Insets bottom="15.0" />
                                  </VBox.margin>
                               </HBox>
-                              <TableView fx:id="workerManTableView" prefHeight="394.0" prefWidth="900.0" stylesheets="@../css/Main.css" />
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                              <TableView fx:id="workerManTableView" prefHeight="342.0" prefWidth="896.0" stylesheets="@../css/Main.css" />
+                              <AnchorPane prefHeight="100.0" prefWidth="896.0">
                                  <children>
-                                    <GridPane layoutX="170.0" layoutY="27.0" prefHeight="109.0" prefWidth="546.0">
+                                    <GridPane layoutX="175.0" layoutY="22.0" prefHeight="109.0" prefWidth="546.0">
                                        <children>
                                           <Label text="姓名：">
                                              <font>
@@ -298,12 +307,12 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="workerManNameField" GridPane.columnIndex="1" />
-                                          <TextField fx:id="workerManExpertiseField" GridPane.columnIndex="3" />
-                                          <TextField fx:id="workerManIdField" prefHeight="30.0" prefWidth="161.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                          <TextField fx:id="workerManPhoneField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                          <ChoiceBox fx:id="workerManTitleChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <Button mnemonicParsing="false" onAction="#workerManModifyButtonFired" text="修改" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                          <TextField fx:id="workerManNameField" styleClass="textField" GridPane.columnIndex="1" />
+                                          <TextField fx:id="workerManExpertiseField" styleClass="textField" GridPane.columnIndex="3" />
+                                          <TextField fx:id="workerManIdField" prefHeight="30.0" prefWidth="161.0" styleClass="textField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                          <TextField fx:id="workerManPhoneField" styleClass="textField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                          <ChoiceBox fx:id="workerManTitleChoiceBox" prefWidth="150.0" styleClass="choiceBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Button mnemonicParsing="false" onAction="#workerManModifyButtonFired" styleClass="editButton" stylesheets="@../css/Buttons.css" text="修改" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                                           <DatePicker fx:id="workerManDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                        <columnConstraints>
@@ -350,11 +359,11 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </AnchorPane>
-      <VBox fx:id="menuVBox" prefHeight="650.0" prefWidth="200.0" styleClass="sidebar" stylesheets="@../css/Main.css" translateX="-200.0">
+      <VBox fx:id="menuVBox" prefHeight="650.0" prefWidth="250.0" styleClass="sidebar" stylesheets="@../css/Main.css" translateX="-250.0">
          <children>
             <AnchorPane prefHeight="41.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="8.0" prefHeight="60.0" prefWidth="200.0" translateX="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -377,7 +386,7 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Rectangle fx:id="doctorRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="doctorRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="250.0" />
                </children>
                <VBox.margin>
                   <Insets />
@@ -391,7 +400,7 @@
             </AnchorPane>
             <AnchorPane layoutX="10.0" layoutY="30.0" prefHeight="41.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0" translateX="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -414,7 +423,7 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Rectangle fx:id="nurseRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="nurseRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="250.0" />
                </children>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -428,7 +437,7 @@
             </AnchorPane>
             <AnchorPane layoutX="10.0" layoutY="30.0" prefHeight="41.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="8.0" prefHeight="60.0" prefWidth="200.0" translateX="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <ImageView fitHeight="33.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -451,7 +460,7 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Rectangle fx:id="workerRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="workerRec" arcHeight="5.0" arcWidth="5.0" fill="#b0b0b0" height="60.0" onMouseClicked="#switchChoice" onMouseEntered="#shadowShow" onMouseExited="#shadowHide" opacity="0.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="250.0" />
                </children>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -463,10 +472,32 @@
                   <Insets />
                </VBox.margin>
             </AnchorPane>
+            <Button mnemonicParsing="false" onAction="#logoutButtonFired" prefHeight="38.0" prefWidth="41.0" styleClass="logoutButton" stylesheets="@../css/Buttons.css" text="Button">
+               <VBox.margin>
+                  <Insets left="200.0" top="400.0" />
+               </VBox.margin>
+            </Button>
          </children>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
       </VBox>
+      <HBox alignment="CENTER_RIGHT" layoutX="804.0" layoutY="11.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="84.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#minimizeWindow" prefHeight="30.0" prefWidth="30.0" styleClass="minimizeButton" stylesheets="@../css/Buttons.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#closeWindow" prefHeight="30.0" prefWidth="30.0" styleClass="closeButton" stylesheets="@../css/Buttons.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

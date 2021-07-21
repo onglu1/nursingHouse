@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -24,15 +25,19 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import main.Admin;
 import main.Main;
 import model.Database;
 import model.UserAccount;
 
-public class LoginInterfaceController implements Initializable{
-	
+public class LoginInterfaceController{
+	Stage thisStage = null;
+	@FXML
+	private AnchorPane quq;
 	@FXML
     private TextField userNameTextField;
 
@@ -57,7 +62,18 @@ public class LoginInterfaceController implements Initializable{
     @FXML
     private Hyperlink loginTypeHyperlink;
     
+    
     private boolean loginType = false;
+    //关闭窗口
+    @FXML
+    private void closeWindow() {
+    	thisStage.hide();
+    }
+    //最小化窗口
+    @FXML 
+    private void minimizeWindow() { 
+    	thisStage.setIconified(true);
+    }
     @FXML
     void getFocus(MouseEvent event) {
     	if(event.getButton() == MouseButton.PRIMARY && event.getEventType() == MouseEvent.MOUSE_PRESSED) {
@@ -101,9 +117,8 @@ public class LoginInterfaceController implements Initializable{
     		ArrayList<UserAccount> users = null;
     		if(loginType) users = Database.getInstance().getAdmins();
     		else users = Database.getInstance().getUsers();
-    		System.out.println(users.contains(new UserAccount(userName, password.getText())));
 			if(users.contains(new UserAccount(userName, password.getText()))) {
-        		System.out.println("登陆成功");
+        		Database.getInstance().setLoginUser(users.get(users.indexOf(new UserAccount(userName, password.getText()))));
         		Stage stage = new Stage();
         		if(loginType) {
         			Admin main = new Admin();
@@ -113,6 +128,7 @@ public class LoginInterfaceController implements Initializable{
         		} else {
         			Main main = new Main();
             		loginButton.getScene().getWindow().hide();
+            		
             		main.start(stage);
         		}
         		
@@ -123,7 +139,6 @@ public class LoginInterfaceController implements Initializable{
         		fade.setFromValue(0);
         		fade.setToValue(1);
         		fade.play();
-//            		userNameTextField.setText("qwq");
         		Alert alert = new Alert(AlertType.ERROR, "登陆失败，用户名或密码有误");
         		userNameTextField.setPromptText("输入用户名");
         		password.setPromptText("输入密码");
@@ -160,12 +175,12 @@ public class LoginInterfaceController implements Initializable{
 			}
 		});
     }
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	public void init() {
 		// TODO Auto-generated method stub
 		showPasswordImageView.setImage(new Image("/icon/password-visible.png"));
 		setTextListener(showPasswordField);
 		setTextListener(hidePasswordField);
 		setTextListener(userNameTextField);
+		thisStage = (Stage)loginButton.getScene().getWindow();
 	}
 }

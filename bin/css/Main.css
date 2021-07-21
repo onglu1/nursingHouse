@@ -1,6 +1,144 @@
 .sidebar {
-	-fx-background-color:  #FFEFDB;
+	-fx-background-color:  linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
     -fx-background-radius: 0px 5px 5px 0px;
+    -fx-border-width: 1;
+    
 }
 
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
 
+.table-view *.scroll-bar:horizontal *.increment-arrow, 
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+.table-view {
+    -fx-border-width: 1px;
+    -fx-border-color: #CACACA;
+    -fx-background-color: transparent;
+}
+
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell {
+    -fx-font-size: 16px;
+}
+
+.table-view .filler {
+    -fx-background-color: #BDE8FF;
+}
+
+.table-view .text {
+    -fx-text-fill: red;
+}
+
+.table-view .column-header {
+    -fx-background-color: #BDE8FF;
+    -fx-pref-height: 37px;
+    -fx-border-width: 1px;
+    -fx-border-color: #D9D9D9;
+    -fx-border-insets: -2px -2px 0px -2px;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: #363739;
+    -fx-font-weight: normal;
+    -fx-font-size: 15px;
+}
+
+.table-row-cell {
+    /*行高*/
+    -fx-cell-size: 35px;
+}
+
+.table-row-cell .cell {
+    -fx-alignment: center;
+    -fx-text-fill: #333333;
+}
+
+.table-view .table-cell:selected {
+    -fx-text-fill: white;
+}
+
+.table-view .table-column .column-header {
+    -fx-background-color: #363739;
+}
+
+.cell {
+    /*-fx-border-width: 0px 1px 0 0;*/
+    /*-fx-border-color: #CACACA;*/
+}
+
+.table-view .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.viewport {
+    -fx-background-color: white;
+}
+.window{
+	-fx-border-color:  black;
+	
+}
+.tab {
+    -fx-background-color: transparent ;
+}
+.tab:selected {
+    -fx-background-color: Bisque;
+}
+
+.tab-pane>*.tab-header-area>*.tab-header-background
+{
+    -fx-background-color: -fx-outer-border, -fx-text-box-border, WhiteSmoke;
+}
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px;
+    -fx-border-color: transparent;
+}
+.choiceBox{
+	-fx-cursor: hand;
+	-fx-min-width: 100px;
+	-fx-min-height: 30;
+	-fx-border-width: 1px;    /**边框宽度*/
+	-fx-background-radius: 10;
+	-fx-border-radius: 5;
+	-fx-border-color: rgb(179,206,251); /**边框颜色 */
+	-fx-background-color: white; /**背景颜色 */
+	-fx-mark-color: green ;	/**下拉框箭头颜色和选中后前面√颜色 */
+	-fx-font-size: 16px;
+}
+.choiceBox:hover{
+	-fx-background-color: WhiteSmoke;
+}
+.choiceBox .context-menu{
+	-fx-cursor: hand;
+	-fx-min-width: 100px;
+	-fx-font-size: 16px;
+	-fx-background-radius: 15px; /**圆角 */
+}
+
+.textField {
+	-fx-background-color: white;
+	-fx-background-radius: 10;
+	-fx-border-radius: 5;
+	-fx-border-color: rgb(179,206,251);
+}
+.textField:hover{
+	-fx-background-color: WhiteSmoke;
+}
+
+.textField:pressed{
+	-fx-background-color: rgb(179,206,251);
+}

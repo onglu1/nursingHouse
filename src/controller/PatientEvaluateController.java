@@ -25,7 +25,6 @@ public class PatientEvaluateController {
 	private Template template;
     @FXML
     private Label titleIdLabel;
-
     @FXML
     private RadioButton choice0;
 
@@ -58,7 +57,7 @@ public class PatientEvaluateController {
     		alert.showAndWait();
     		return ;
     	}
-    	Alert alert = new Alert(AlertType.CONFIRMATION, "确定提交，仅显示分数，记录将不保存？");
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "确定提交？");
     	alert.setHeaderText("提示");
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
@@ -80,6 +79,7 @@ public class PatientEvaluateController {
     		}
     		alert2.showAndWait();
     		choice0.getScene().getWindow().hide();
+    		Database.saveToFile();
     		return ;
     	}
     }

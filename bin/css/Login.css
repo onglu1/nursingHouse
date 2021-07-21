@@ -1,0 +1,34 @@
+.LoginButton {
+	-fx-padding:  5 22 5 22;
+	-fx-border-color:  #f8f8ff;
+	-fx-border-width: 5;
+	-fx-border-radius: 5;
+	-fx-border-insets: -1;
+	-fx-background-color: #ffb6c1;
+	-fx-background-radius: 7;
+	-fx-font-family: 'YouYuan';
+	-fx-font-size:  25;
+	-fx-font-weight: 700;
+}
+
+.LoginButton:hover {
+	-fx-background-color: WhiteSmoke;
+}
+
+.textField {
+	-fx-background-color: white;
+	-fx-background-radius: 20;
+	-fx-border-radius: 20;
+	-fx-border-color: rgb(179,206,251);
+}
+.textField:hover{
+	-fx-background-color: WhiteSmoke;
+}
+
+.textField:pressed{
+	-fx-background-color: MistyRose;
+}
+.window{
+	-fx-border-color:  black;
+	
+}

@@ -38,50 +38,16 @@ public class Database implements Serializable{
 	private long templateId = 1;
 	private Template tmptemplate = null;
 	private static Database singleton;
+	private UserAccount loginUser = null;
 	
-//	static {
-//		singleton = new Database();
-//		singleton.setProblemId(1);
-//		singleton.getUsers().add(new UserAccount("user1", "user1"));
-//		singleton.getUsers().get(0).setTitile("医生");
-//		singleton.getUsers().get(0).setExpertise("摸鱼");
-//		singleton.getUsers().get(0).setName("优秀的医生");
-//		singleton.getUsers().add(new UserAccount("user2", "user2"));
-//		singleton.getUsers().get(1).setTitile("医生");
-//		singleton.getUsers().get(1).setExpertise("睡觉");
-//		singleton.getUsers().get(1).setName("不好的医生");
-//		singleton.getUsers().add(new UserAccount("user3", "user3"));
-//		singleton.getUsers().get(2).setTitile("护士");
-//		singleton.getUsers().get(2).setExpertise("睡觉");
-//		singleton.getUsers().get(2).setName("不好的护士");
-//		singleton.getUsers().add(new UserAccount("user4", "user4"));
-//		singleton.getUsers().get(3).setTitile("护工");
-//		singleton.getUsers().get(3).setExpertise("睡觉");
-//		singleton.getUsers().get(3).setName("不好的护工");
-//		singleton.getAdmins().add(new UserAccount("admin1", "admin1"));
-//		singleton.getAdmins().add(new UserAccount("admin2", "admin2"));
-//		singleton.getPatients().add(new Patient("张三", 18, "331081201111217299", true, "张三的爹", "15305865401"));
-//		singleton.getPatients().add(new Patient("李四", 18, "33108120111121729X", true, "15305865401", "李四的娘", "15305865401"));
-//		singleton.getBuildings().add(new Building("一号楼"));
-//		singleton.getBuildings().add(new Building("二号楼"));
-//		singleton.getBuildings().get(0).getLevels().add(new Level("一楼", singleton.getBuildings().get(0)));
-//		singleton.getBuildings().get(0).getLevels().get(0).getRooms().add(new Room("304", true, Room.BATHROOM, singleton.getBuildings().get(0).getLevels().get(0), 3, 3));
-//		singleton.getBuildings().get(0).getLevels().add(new Level("二楼", singleton.getBuildings().get(0)));
-//		singleton.getBuildings().get(0).getLevels().get(1).getRooms().add(new Room("306", true, Room.CHESSROOM, singleton.getBuildings().get(0).getLevels().get(1), 2, 2));
-//		singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("一号床", singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0)));
-//		singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0).getBeds().add(new Bed("二号床", singleton.getBuildings().get(0).getLevels().get(0).getRooms().get(0)));
-//		singleton.getProblems().add(new Problem("你是谁", 0, new ArrayList<String>(Arrays.asList("你", "我", "他")), Problem.TYPES[0]));
-//		singleton.getTemplates().add(new Template("qwer"));
-//		singleton.getTemplates().get(0).getProblems().add(new Problem());
-//		singleton.getTemplates().get(0).getProblems().add(new Problem());
-//		singleton.getTemplates().get(0).getProblems().add(new Problem());
-//		singleton.getTemplates().add(new Template("qwe"));
-//		singleton.getTemplates().get(1).getProblems().add(new Problem());
-//		singleton.getTemplates().add(new Template("awe"));
-//		singleton.getTemplates().get(1).getProblems().add(new Problem());
-//		singleton.setTmptemplate(singleton.getTemplates().get(0));
-//		saveToFile();
-//	}
+
+	public UserAccount getLoginUser() {
+		return loginUser;
+	}
+
+	public void setLoginUser(UserAccount loginUser) {
+		this.loginUser = loginUser;
+	}
 
 	private Database() {
 		
@@ -208,8 +174,6 @@ public class Database implements Serializable{
 		variableAr.add(Database.getInstance().getTemplateId());
 		jsonString = JSON.toJSONString(variableAr);
 		StringtoFile(jsonString, path + "variables.json");
-//		System.out.println("qwq");
-//		System.out.println("qwq");
 	}
 	
 	public void setUsers(ArrayList<UserAccount> users) {
@@ -262,11 +226,6 @@ public class Database implements Serializable{
 			jsonString = readJson(file);
 			singleton.setTemplates(new ArrayList<Template>(JSONArray.parseArray(jsonString, Template.class)));
 		}
-		file = new File(path + "templates.json");
-		if(file.exists()) {
-			jsonString = readJson(file);
-			singleton.setTemplates(new ArrayList<Template>(JSONArray.parseArray(jsonString, Template.class)));
-		}
 		ArrayList<Object> variableAr = new ArrayList<Object>();
 //		jsonString = JSON.toJSONString(variableAr);
 //		StringtoFile(jsonString, path + "variables.json");
@@ -276,8 +235,6 @@ public class Database implements Serializable{
 			variableAr = new ArrayList<Object>(JSONArray.parseArray(jsonString));
 			Database.getInstance().setProblemId((int)variableAr.get(0));
 			Database.getInstance().setTemplateId((int)variableAr.get(1));
-			System.out.println(Database.getInstance().getProblemId());
-			System.out.println(Database.getInstance().getTemplateId());
 			
 		}
 		

@@ -10,31 +10,31 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#enterPressed" onMousePressed="#getFocus" prefHeight="541.0" prefWidth="559.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginInterfaceController">
+<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#enterPressed" onMousePressed="#getFocus" prefHeight="541.0" prefWidth="820.0" styleClass="window" stylesheets="@../../bin/css/Login.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginInterfaceController">
    <children>
-      <AnchorPane layoutX="97.0" layoutY="92.0" prefHeight="357.0" prefWidth="365.0">
+      <AnchorPane layoutX="228.0" layoutY="92.0" prefHeight="357.0" prefWidth="365.0">
          <children>
             <Pane layoutX="14.0" layoutY="16.0" opacity="0.58" prefHeight="325.0" prefWidth="335.0" style="-fx-background-color: #000000;" />
             <Pane layoutX="4.0" layoutY="4.0" opacity="0.87" prefHeight="325.0" prefWidth="335.0" style="-fx-background-color: #dcdcdc;" />
             <AnchorPane layoutX="18.0" layoutY="8.0" prefHeight="332.0" prefWidth="329.0">
                <children>
                   <Label layoutX="69.0" layoutY="41.0" style="-fx-font-family: 'YouYuan'; -fx-font-size: 40; -fx-font-weight: 900;" text="欢迎使用" />
-                  <TextField fx:id="userNameTextField" layoutX="60.0" layoutY="109.0" prefHeight="41.0" prefWidth="206.0" promptText="输入用户名">
+                  <TextField fx:id="userNameTextField" layoutX="60.0" layoutY="109.0" prefHeight="41.0" prefWidth="206.0" promptText="输入用户名" styleClass="textField" stylesheets="@../css/Login.css">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="showPasswordField" layoutX="60.0" layoutY="166.0" prefHeight="41.0" prefWidth="206.0" promptText="输入密码" visible="false">
+                  <TextField fx:id="showPasswordField" layoutX="60.0" layoutY="166.0" prefHeight="41.0" prefWidth="206.0" promptText="输入密码" styleClass="textField" stylesheets="@../css/Login.css" visible="false">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </TextField>
-                  <PasswordField fx:id="hidePasswordField" layoutX="60.0" layoutY="166.0" prefHeight="41.0" prefWidth="206.0" promptText="输入密码">
+                  <PasswordField fx:id="hidePasswordField" layoutX="60.0" layoutY="166.0" prefHeight="41.0" prefWidth="206.0" promptText="输入密码" styleClass="textField" stylesheets="@../css/Login.css">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </PasswordField>
-                  <Button fx:id="loginButton" contentDisplay="CENTER" layoutX="97.0" layoutY="232.0" mnemonicParsing="false" onAction="#login" prefHeight="17.0" prefWidth="103.0" style="-fx-padding: 5 22 5 22; -fx-border-color: #f8f8ff; -fx-border-width: 5; -fx-border-radius: 5; -fx-border-insets: -1; -fx-background-color: #ffb6c1; -fx-background-radius: 7; -fx-font-family: 'YouYuan'; -fx-font-size: 25; -fx-font-weight: 700;" text="登录">
+                  <Button fx:id="loginButton" contentDisplay="CENTER" layoutX="97.0" layoutY="232.0" mnemonicParsing="false" onAction="#login" prefHeight="17.0" prefWidth="103.0" styleClass="LoginButton" stylesheets="@../css/Login.css" text="登录">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -63,5 +63,25 @@
             </AnchorPane>
          </children>
       </AnchorPane>
+      <HBox alignment="CENTER_RIGHT" layoutX="713.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="84.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#minimizeWindow" prefHeight="30.0" prefWidth="30.0" styleClass="minimizeButton" stylesheets="@../css/Buttons.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#closeWindow" prefHeight="30.0" prefWidth="30.0" styleClass="closeButton" stylesheets="@../css/Buttons.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

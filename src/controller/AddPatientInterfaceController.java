@@ -275,6 +275,7 @@ public class AddPatientInterfaceController implements Initializable{
 		setLengthListener(emergencyContactField, 15);
 		setLengthListener(emergencyPhoneNumberField, 15);
 		setLengthListener(phoneNumberField, 15);
+		setLengthListener(idField, 18);
 		//仅允许数字
 		setNumberOnlyListener(phoneNumberField);
 		setNumberOnlyListener(emergencyPhoneNumberField);
